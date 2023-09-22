@@ -1,0 +1,7 @@
+# This global .gitattributes file is adhered to via command:
+# git config --global core.attributesfile ~/git-global/.gitattributes_global
+#
+# Use this file on every device where git development is done.
+# don't count notebooks file for linguistics
+notebooks/** linguist-vendored 
+*.ipynb filter=lfs diff=lfs merge=lfs -text
