@@ -5,9 +5,11 @@
 # B cells and mechanisms of lymphomagenesis. Proc Natl Acad Sci U S A. 2012 Feb 
 # 14; 109(7):2672-7. (aka Martinez2012)
 
-using DynamicalSystems
+using DynamicalSystems: SVector, SMatrix, CoupledODEs
+using Distributions: Normal, pdf
 using UnPack
 
+const NORMAL_DISTRIBUTION_PEAK_Y = 0.08
 germinal_center_ode_params = Dict{Symbol, Float64}(
     :μₚ => 10e-6, # Basal transcription rate
     :μb => 2.0, 
@@ -28,6 +30,15 @@ germinal_center_ode_params = Dict{Symbol, Float64}(
     :bcr₀ => NaN, # Range of BCR-induced degradation of BCL6 in [0, 10]
     :cd₀ => NaN,  # Range of CD40-induced transcription of IRF4 in [0, 1] 
     :C₀ => 10e-8, 
+
+    # stochastic BCR and CD40 regulation parameters
+    :bcr_max_signal => 12 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :bcr_max_signal_centered_on_timestep => 40, # fig 3 Martinez 2012
+    :bcr_max_signal_timestep_std => 5, # fig 3 Martinez2012
+
+    :cd40_max_signal => 10 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :cd40_max_signal_centered_on_timestep => 50, # fig 3 Martinez2012 
+    :cd40_max_signal_timestep_std => 5, # fig 3 Martinez2012
 )
 
 """
@@ -64,9 +75,63 @@ function germinal_center_exit_pathway_rule(u, p, t)
     r_scaled = transcription_factor_scaler(kᵣ, r)
 
     # regulatory signals
-    # TODO: Make stochastic???
     bcr = BCR(; bcr₀, kb, b)
     cd40 = CD40(; cd₀, kb, b)
+
+    # system describing evolution of transcription factors in germinal center
+    pdot = μₚ + σₚ*kb_scaled + σₚ*r_scaled - λₚ*p
+    bdot = μb + σb*kp_scaled*kb_scaled*kr_scaled - (λb + bcr)*b
+    rdot = μᵣ + σᵣ*r_scaled + cd40 - λᵣ*r
+
+    return SVector(pdot, bdot, rdot)
+end
+
+"""
+    germinal_center_stochastic_exit_pathway_rule(u, p, t)
+
+Return rule for gene regulatory module controlling germinal center exit pathway
+with coupled stochastic BCR and CD40 gene regulatory signals.
+
+Implements CD40 and BCR gene regulation as gaussian distribution centered
+on a different timesteps as well as having different maximum signals
+"""
+function germinal_center_stochastic_exit_pathway_rule(u, p, t)
+    # parameters 
+    @unpack μₚ, μb, μᵣ = p
+    @unpack σₚ, σb, σᵣ = p
+    @unpack kₚ, kb, kᵣ = p
+    @unpack λₚ, λb, λᵣ = p
+    @unpack bcr₀, cd₀, C₀ = p
+   
+    # stochastic regulation parameters 
+    @unpack bcr_max_signal = p
+    @unpack bcr_max_signal_centered_on_timestep = p
+    @unpack bcr_max_signal_timestep_std = p
+
+    @unpack cd40_max_signal = p
+    @unpack cd40_max_signal_centered_on_timestep = p
+    @unpack cd40_max_signal_timestep_std = p
+
+    # transcription factor state variables 
+    p, b, r = u
+
+    # compute scaled dissociation constants and protein levels
+    kp_scaled = dissociation_scaler(kₚ, p)
+    kb_scaled = dissociation_scaler(kb, b)
+    kr_scaled = dissociation_scaler(kᵣ, r)
+    r_scaled = transcription_factor_scaler(kᵣ, r)
+
+    # regulatory signals
+    bcr = stochastic_regulatory_signal(; 
+        peak = bcr_max_signal, 
+        μ = bcr_max_signal_centered_on_timestep, 
+        σ = bcr_max_signal_timestep_std,
+        t = t)
+    cd40 = stochastic_regulatory_signal(; 
+        peak = cd40_max_signal,
+        μ = cd40_max_signal_centered_on_timestep,
+        σ = cd40_max_signal_timestep_std,
+        t = t)
 
     # system describing evolution of transcription factors in germinal center
     pdot = μₚ + σₚ*kb_scaled + σₚ*r_scaled - λₚ*p
@@ -87,52 +152,16 @@ function germinal_center_exit_pathway(u0, params)
 end 
 
 """
-    bcr_subnetwork(u, p, t)
+    germinal_center_stochastic_exit_pathway(u0, params) 
 
-Dynamics of BCR signaling decoupled from CD40 signaling. 
+Return CoupledODEs model for gene regulatory module controlling germinal center 
+exit pathway with stochastic BCR and CD40 regulatory signals. 
 
-# References
-[1] : Equations S3, S6, and S7 from Martinez2012
+TODO: Should a seed be set?? If so where? Does it make sense to have
+the calling of the random distribution func in the ds rule??
 """
-function bcr_subnetwork_rule(u, p, t)
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
-
-    p, b, r = u 
-
-    # modified state variables for decoupling BCR from CD40 
-    pdot = μₚ + σₚ*(kb^2 / (kb^2 + b^2)) - λₚ*p
-    bdot = μb + σb*(kₚ^2 / (kₚ^2 + b^2))*(kb^2 / (kb^2 + b^2)) - 
-        (λb + bcr₀*(kb^2 / (kb^2 + b^2)))
-
-    # IRF4 state 
-    rdot = μᵣ + σᵣ*(r^2 / (kᵣ^2 + r^2)) + cd40 - λᵣ*r
-
-    return SVector(pdot, bdot, rdot)
-end 
-
-"""
-    cd40_subnetwork(u, p, t)
-
-Same system as germinal_center_exit_pathway???
-"""
-function cd40_subnetwork_rule(u, p, t)
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
-
-    p, b, r = u 
-    cd40 = CD40(; cd₀, kb, b)
-
-    # modified state variable for absence of signals 
-    rdot = nothing 
-
-    throw("notimplemented")
+function germinal_center_stochastic_exit_pathway(u0, params) 
+    return CoupledODEs(germinal_center_stochastic_exit_pathway_rule, u0, params)
 end 
 
 """
@@ -151,13 +180,34 @@ k associated with uᵢ.
 transcription_factor_scaler(k, uᵢ) = uᵢ^2 / (k^2 + uᵢ^2)
 
 """
-These should be gaussian peaks at certain time points see figure 3
+    BCR(; bcr₀, kb, b)
 
-peak centered on some time point (should be a parameter)
+Return BCR gene regulatory signal.
+
+# References
+[1] : Equation S4 from Martinez2012
 """
 BCR(; bcr₀, kb, b) = bcr₀*dissociation_scaler(kb, b)
 
+"""
+    CD40(; cd₀, kb, b)
+
+Return CD40 gene regulatory signal.
+
+# References
+[1] : Equation S5 from Martinez2012
+"""
 CD40(; cd₀, kb, b) = cd₀*dissociation_scaler(kb, b)
+
+"""
+    stochastic_regulatory_signal(; peak, μ, σ, t)
+
+Return BCR/CD40 regulatory signal from evaluating the PDF of the normal 
+distribution with the desired parameters `μ` and `σ` at point `t` scaled by 
+`peak`.
+"""
+stochastic_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
+
 
 """
     germinal_center_exit_pathway_jacobian(u, p, t)
