@@ -222,6 +222,8 @@ gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 Return bistability constraint for IRF4 written as a function of relevant IRF4
 kinetic parameters.
 
+NOTE: Maybe altering σᵣ is what leads to the Figures 2 (β ∈ {1.5, 1.8, 2})
+
 # References
 [1] : Equation S9 (i.e., β = ...) from Martinez2012
 """
