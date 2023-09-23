@@ -27,18 +27,20 @@ germinal_center_ode_params = Dict{Symbol, Float64}(
     :λb => 1.0, 
     :λᵣ => 1.0,
 
-    :bcr₀ => NaN, # Range of BCR-induced degradation of BCL6 in [0, 10]
-    :cd₀ => NaN,  # Range of CD40-induced transcription of IRF4 in [0, 1] 
+    :bcr₀ => 0.05, # Range of BCR-induced degradation of BCL6 in [0, 10]
+    :cd₀ => 0.015,  # Range of CD40-induced transcription of IRF4 in [0, 1] 
     :C₀ => 10e-8, 
 
-    # stochastic BCR and CD40 regulation parameters
-    :bcr_max_signal => 12 / NORMAL_DISTRIBUTION_PEAK_Y,
-    :bcr_max_signal_centered_on_timestep => 40, # fig 3 Martinez 2012
-    :bcr_max_signal_timestep_std => 5, # fig 3 Martinez2012
+    # gaussian BCR and CD40 regulation parameters
+    # determined experimentally in 
+    # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
+    :bcr_max_signal => 0.015 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :bcr_max_signal_centered_on_timestep => 50, 
+    :bcr_max_signal_timestep_std => 1,
 
-    :cd40_max_signal => 10 / NORMAL_DISTRIBUTION_PEAK_Y,
-    :cd40_max_signal_centered_on_timestep => 50, # fig 3 Martinez2012 
-    :cd40_max_signal_timestep_std => 5, # fig 3 Martinez2012
+    :cd40_max_signal => 0.003 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :cd40_max_signal_centered_on_timestep => 60,
+    :cd40_max_signal_timestep_std => 1,
 )
 
 """
@@ -87,15 +89,15 @@ function germinal_center_exit_pathway_rule(u, p, t)
 end
 
 """
-    germinal_center_stochastic_exit_pathway_rule(u, p, t)
+    germinal_center_gaussian_exit_pathway_rule(u, p, t)
 
 Return rule for gene regulatory module controlling germinal center exit pathway
-with coupled stochastic BCR and CD40 gene regulatory signals.
+with coupled gaussian BCR and CD40 gene regulatory signals.
 
 Implements CD40 and BCR gene regulation as gaussian distribution centered
 on a different timesteps as well as having different maximum signals
 """
-function germinal_center_stochastic_exit_pathway_rule(u, p, t)
+function germinal_center_gaussian_exit_pathway_rule(u, p, t)
     # parameters 
     @unpack μₚ, μb, μᵣ = p
     @unpack σₚ, σb, σᵣ = p
@@ -103,7 +105,7 @@ function germinal_center_stochastic_exit_pathway_rule(u, p, t)
     @unpack λₚ, λb, λᵣ = p
     @unpack bcr₀, cd₀, C₀ = p
    
-    # stochastic regulation parameters 
+    # gaussian regulation parameters 
     @unpack bcr_max_signal = p
     @unpack bcr_max_signal_centered_on_timestep = p
     @unpack bcr_max_signal_timestep_std = p
@@ -122,12 +124,12 @@ function germinal_center_stochastic_exit_pathway_rule(u, p, t)
     r_scaled = transcription_factor_scaler(kᵣ, r)
 
     # regulatory signals
-    bcr = stochastic_regulatory_signal(; 
+    bcr = gaussian_regulatory_signal(; 
         peak = bcr_max_signal, 
         μ = bcr_max_signal_centered_on_timestep, 
         σ = bcr_max_signal_timestep_std,
         t = t)
-    cd40 = stochastic_regulatory_signal(; 
+    cd40 = gaussian_regulatory_signal(; 
         peak = cd40_max_signal,
         μ = cd40_max_signal_centered_on_timestep,
         σ = cd40_max_signal_timestep_std,
@@ -152,16 +154,16 @@ function germinal_center_exit_pathway(u0, params)
 end 
 
 """
-    germinal_center_stochastic_exit_pathway(u0, params) 
+    germinal_center_gaussian_exit_pathway(u0, params) 
 
 Return CoupledODEs model for gene regulatory module controlling germinal center 
-exit pathway with stochastic BCR and CD40 regulatory signals. 
+exit pathway with gaussian BCR and CD40 regulatory signals. 
 
 TODO: Should a seed be set?? If so where? Does it make sense to have
 the calling of the random distribution func in the ds rule??
 """
-function germinal_center_stochastic_exit_pathway(u0, params) 
-    return CoupledODEs(germinal_center_stochastic_exit_pathway_rule, u0, params)
+function germinal_center_gaussian_exit_pathway(u0, params) 
+    return CoupledODEs(germinal_center_gaussian_exit_pathway_rule, u0, params)
 end 
 
 """
@@ -200,13 +202,13 @@ Return CD40 gene regulatory signal.
 CD40(; cd₀, kb, b) = cd₀*dissociation_scaler(kb, b)
 
 """
-    stochastic_regulatory_signal(; peak, μ, σ, t)
+    gaussian_regulatory_signal(; peak, μ, σ, t)
 
 Return BCR/CD40 regulatory signal from evaluating the PDF of the normal 
 distribution with the desired parameters `μ` and `σ` at point `t` scaled by 
 `peak`.
 """
-stochastic_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
+gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 
 
 """

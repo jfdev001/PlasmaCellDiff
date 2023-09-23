@@ -1,10 +1,10 @@
 module PlasmaCellDiff
 
-using DrWatson
-
 export germinal_center_ode_params
-export germinal_center_exit_pathway, germinal_center_exit_pathway_jacobian
-export BCR, CD40, stochastic_regulatory_signal
+export germinal_center_exit_pathway, germinal_center_gaussian_exit_pathway
+export germinal_center_exit_pathway_jacobian
+export BCR, CD40, gaussian_regulatory_signal
+export NORMAL_DISTRIBUTION_PEAK_Y
 
 include("martinez_germinal_center_model.jl")
 
