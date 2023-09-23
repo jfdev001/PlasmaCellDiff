@@ -246,4 +246,56 @@ function germinal_center_exit_pathway_jacobian(u, p, t)
     return SMatrix{3, 3}(J)
 end 
 
+"""
+    germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
+
+Return Jacobian of `germinal_center_gaussian_exit_pathway_rule`.
+
+See `notebooks/germinal_cell_gaussian_jacobian.pdf` for the source that 
+generated the symbolic Jacobian.
+"""
+function germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
+    # parameters 
+    @unpack μₚ, μb, μᵣ = p
+    @unpack σₚ, σb, σᵣ = p
+    @unpack kₚ, kb, kᵣ = p
+    @unpack λₚ, λb, λᵣ = p
+    @unpack bcr₀, cd₀, C₀ = p
+   
+    # gaussian regulation parameters 
+    @unpack bcr_max_signal = p
+    @unpack bcr_max_signal_centered_on_timestep = p
+    @unpack bcr_max_signal_timestep_std = p
+
+    @unpack cd40_max_signal = p
+    @unpack cd40_max_signal_centered_on_timestep = p
+    @unpack cd40_max_signal_timestep_std = p
+
+    p, b, r = u
+
+    J = zeros(3, 3)
+
+    J[1, 1] = -λₚ
+    J[1, 2] = -(2*b*kb^2*σₚ)/(b^2 + kb^2)^2 
+    J[1, 3] = -(2*r^3*σₚ)/(r^2 + kᵣ^2)^2 + (2*r*σₚ)/(r^2 + kᵣ^2) 
+
+    J[2, 1] = -(2*p*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)^2*(r^2 + kᵣ^2))
+    
+    bcr_signal_numerator = bcr_max_signal*
+        exp(-(t - bcr_max_signal_centered_on_timestep)^2/
+        (2*bcr_max_signal_timestep_std^2))  
+    bcr_signal_denominator = (sqrt(2*π) * bcr_max_signal_timestep_std)
+    bcr_signal_term = bcr_signal_numerator/bcr_signal_denominator 
+    dissociation_prod_term = (2*b*kb^2*kₚ^2*kᵣ^2*σb)/
+        ((b^2+kb^2)^2*(p^2+kₚ^2)*(r^2+kᵣ^2))
+    J[2, 2] = -bcr_signal_term - λb - dissociation_prod_term 
+    J[2, 3] = -(2*r*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)*(r^2 + kᵣ^2)^2)
+
+    J[3, 1] = 0
+    J[3, 2] = 0
+    J[3, 3] = -λᵣ - (2*r^3*σᵣ)/((r^2 + kᵣ^2)^2) + (2*r*σᵣ)/(r^2 + kᵣ^2)
+
+    SMatrix{3, 3}(J)
+end 
+
 
