@@ -216,6 +216,17 @@ clearly not necessary for the scope of this project.
 """
 gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 
+"""
+    irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, k) 
+
+Return bistability constraint for IRF4 written as a function of relevant IRF4
+kinetic parameters.
+
+# References
+[1] : Equation S9 (i.e., β = ...) from Martinez2012
+"""
+irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, kᵣ) = (μᵣ + cd40 + σᵣ)/(λᵣ*kᵣ)
+
 
 """
     germinal_center_exit_pathway_jacobian(u, p, t)
