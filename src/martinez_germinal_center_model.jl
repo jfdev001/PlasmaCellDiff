@@ -275,13 +275,11 @@ function germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
 
     p, b, r = u
 
-    J = zeros(3, 3)
+    J_11 = -λₚ
+    J_12 = -(2*b*kb^2*σₚ)/(b^2 + kb^2)^2 
+    J_13 = -(2*r^3*σₚ)/(r^2 + kᵣ^2)^2 + (2*r*σₚ)/(r^2 + kᵣ^2) 
 
-    J[1, 1] = -λₚ
-    J[1, 2] = -(2*b*kb^2*σₚ)/(b^2 + kb^2)^2 
-    J[1, 3] = -(2*r^3*σₚ)/(r^2 + kᵣ^2)^2 + (2*r*σₚ)/(r^2 + kᵣ^2) 
-
-    J[2, 1] = -(2*p*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)^2*(r^2 + kᵣ^2))
+    J_21 = -(2*p*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)^2*(r^2 + kᵣ^2))
     
     bcr_signal_numerator = bcr_max_signal*
         exp(-(t - bcr_max_signal_centered_on_timestep)^2/
@@ -290,12 +288,17 @@ function germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
     bcr_signal_term = bcr_signal_numerator/bcr_signal_denominator 
     dissociation_prod_term = (2*b*kb^2*kₚ^2*kᵣ^2*σb)/
         ((b^2+kb^2)^2*(p^2+kₚ^2)*(r^2+kᵣ^2))
-    J[2, 2] = -bcr_signal_term - λb - dissociation_prod_term 
-    J[2, 3] = -(2*r*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)*(r^2 + kᵣ^2)^2)
+    J_22 = -bcr_signal_term - λb - dissociation_prod_term 
 
-    J[3, 1] = 0
-    J[3, 2] = 0
-    J[3, 3] = -λᵣ - (2*r^3*σᵣ)/((r^2 + kᵣ^2)^2) + (2*r*σᵣ)/(r^2 + kᵣ^2)
+    J_23 = -(2*r*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)*(r^2 + kᵣ^2)^2)
+
+    J_31 = 0
+    J_32 = 0
+    J_33 = -λᵣ - (2*r^3*σᵣ)/((r^2 + kᵣ^2)^2) + (2*r*σᵣ)/(r^2 + kᵣ^2)
+
+    J = [J_11 J_12 J_13
+         J_21 J_22 J_23
+         J_31 J_32 J_33]
 
     SMatrix{3, 3}(J)
 end 
