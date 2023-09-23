@@ -207,6 +207,12 @@ CD40(; cd₀, kb, b) = cd₀*dissociation_scaler(kb, b)
 Return BCR/CD40 regulatory signal from evaluating the PDF of the normal 
 distribution with the desired parameters `μ` and `σ` at point `t` scaled by 
 `peak`.
+
+NOTE: Repeatedly instantiating `Normal` is likely not efficient, but the 
+alternative is passing it as a parameter to the function defining the ODE
+system (`germinal_center_gaussian_exit_pathway`) which is known to be
+inefficient. Perhaps `Benchmark`ing this would be interesting, though is
+clearly not necessary for the scope of this project.
 """
 gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 
