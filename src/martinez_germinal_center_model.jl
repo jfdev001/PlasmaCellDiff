@@ -9,7 +9,8 @@ using DynamicalSystems: SVector, SMatrix, CoupledODEs
 using Distributions: Normal, pdf
 using UnPack
 
-const NORMAL_DISTRIBUTION_PEAK_Y = 0.08
+const NORMAL_DISTRIBUTION_PEAK_Y_STD_5 = 0.08
+const NORMAL_DISTRIBUTION_PEAK_Y_STD_1 = 0.40
 germinal_center_ode_params = Dict{Symbol, Float64}(
     :μₚ => 10e-6, # Basal transcription rate
     :μb => 2.0, 
@@ -34,11 +35,11 @@ germinal_center_ode_params = Dict{Symbol, Float64}(
     # gaussian BCR and CD40 regulation parameters
     # determined experimentally in 
     # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
-    :bcr_max_signal => 0.015 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :bcr_max_signal => 0.1875,
     :bcr_max_signal_centered_on_timestep => 50, 
     :bcr_max_signal_timestep_std => 1,
 
-    :cd40_max_signal => 0.003 / NORMAL_DISTRIBUTION_PEAK_Y,
+    :cd40_max_signal => 0.0375,
     :cd40_max_signal_centered_on_timestep => 60,
     :cd40_max_signal_timestep_std => 1,
 )
