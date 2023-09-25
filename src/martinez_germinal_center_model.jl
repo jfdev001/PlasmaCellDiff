@@ -11,6 +11,7 @@ using UnPack
 
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_5 = 0.08
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_1 = 0.40
+
 germinal_center_ode_params = Dict{Symbol, Float64}(
     :μₚ => 10e-6, # Basal transcription rate
     :μb => 2.0, 
