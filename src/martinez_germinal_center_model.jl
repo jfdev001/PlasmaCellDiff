@@ -9,35 +9,36 @@ using DynamicalSystems: SVector, SMatrix, CoupledODEs
 using Distributions: Normal, pdf
 using UnPack
 
-const NORMAL_DISTRIBUTION_PEAK_Y_STD_5 = 0.08
-const NORMAL_DISTRIBUTION_PEAK_Y_STD_1 = 0.40
+const NORMAL_DISTRIBUTION_PEAK_Y_STD_5::Float64 = 0.08
+const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
 
 # TODO: Could use something like Params{Symbol}
-# then overload method like BCR(p::Params{:constant}), BCR(p::Params{:gaussian})
-germinal_center_ode_params = Dict{Symbol, Float64}(
-    :μₚ => 10e-6, # Basal transcription rate
-    :μb => 2.0, 
-    :μᵣ => 0.1,  
+# then overload method like 
+# BCR(p::Params{:constant, Symbol}), 
+# BCR(p::Params{:gaussian, Symbol})
+# 
+# germinal_center_ode_params
+@kwdef mutable struct 
+    GerminalCenterODEParams{<:Symbol, <:Symbol}
+    μₚ::Float64 = 10e-6, # Basal transcription rate
+    μb::Float64 = 2.0, 
+    μᵣ::Float64 = 0.1,  
 
-    :σₚ => 9.0,   # Maximum induced transcription rate
-    :σb => 100.0, 
-    :σᵣ => 2.6,
+    σₚ::Float64 = 9.0,   # Maximum induced transcription rate
+    σb::Float64 = 100.0, 
+    σᵣ::Float64 = 2.6,
 
-    :kₚ => 1.0, 
-    :kb => 1.0, 
-    :kᵣ => 1.0, 
+    kₚ::Float64 = 1.0, 
+    kb::Float64 = 1.0, 
+    kᵣ::Float64 = 1.0, 
 
-    :λₚ => 1.0,   # Degradation rate 
-    :λb => 1.0, 
-    :λᵣ => 1.0,
-
-    # BCR and CD40 signaling method
-    :bcr_signaling => NaN,  # :gaussian, :reciprocal, :constant
-    :cd40_signaling => NaN, # :gaussian, :reciprocal, :constant
+    λₚ::Float64=> 1.0,   # Degradation rate 
+    λb::Float64=> 1.0, 
+    λᵣ::Float64=> 1.0,
 
     # BCR and CD40 gene regulation as constant in time
-    :bcr_constant => NaN,
-    :cd40_constant => NaN,
+    bcr_constant => 15.0, # from figure S1
+    cd40_constant => NaN,
 
     # Reciprocal function BCR and CD40 regulation parameters
     :bcr₀ => 0.05, # Range of BCR-induced degradation of BCL6 in [0, 10]
