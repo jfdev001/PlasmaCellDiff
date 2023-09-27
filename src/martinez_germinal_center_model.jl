@@ -12,14 +12,9 @@ using UnPack
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_5::Float64 = 0.08
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
 
-# TODO: Could use something like Params{Symbol}
-# then overload method like 
-# BCR(p::Params{:constant, Symbol}), 
-# BCR(p::Params{:gaussian, Symbol})
-# 
 # germinal_center_ode_params
 @kwdef mutable struct 
-    GerminalCenterODEParams{<:Symbol, <:Symbol}
+    GerminalCenterODEParams{BCRMethod, CD40Method}
     μₚ::Float64 = 10e-6, # Basal transcription rate
     μb::Float64 = 2.0, 
     μᵣ::Float64 = 0.1,  
@@ -55,7 +50,7 @@ const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
     :cd40_max_signal => 0.0375,
     :cd40_max_signal_centered_on_timestep => 60,
     :cd40_max_signal_timestep_std => 1,
-)
+end
 
 """
     germinal_center_exit_pathway_rule(u, p, t)
@@ -205,6 +200,30 @@ Return BCR gene regulatory signal.
 """
 BCR(; bcr₀, kb, b) = bcr₀*dissociation_scaler(kb, b)
 
+function BCR(; u, p::GerminalCenterODEParams{:constant, T}, t) where T
+    @unpack bcr_constant = p
+    return bcr_constant 
+end 
+
+function BCR(; u, p::GerminalCenterODEParams{:gaussian, T}, t) where T 
+    # gaussian regulation parameters 
+    @unpack bcr_max_signal = p
+    @unpack bcr_max_signal_centered_on_timestep = p
+    @unpack bcr_max_signal_timestep_std = p
+
+    return gaussian_regulatory_signal(;
+        peak = bcr_max_signal, 
+        μ = bcr_max_signal_centered_on_timestep,
+        σ = bcr_max_signal_timestep_std,
+        t = t)
+end 
+
+function BCR(; u, p::GerminalCenterODEParams{:reciprocal, T}, t) where T
+    @unpack bcr₀, kb
+    p, b, r = u
+    return BCR(; bcr₀, kb, b)
+end 
+
 """
     CD40(; cd₀, kb, b)
 
@@ -214,6 +233,29 @@ Return CD40 gene regulatory signal.
 [1] : Equation S5 from Martinez2012
 """
 CD40(; cd₀, kb, b) = cd₀*dissociation_scaler(kb, b)
+
+function CD40(u, p::GerminalCenterODEParams{T, :constant}, t) where T
+    @unpack cd40_constant = p
+    return cd40_constant
+end
+
+function CD40(u, p::GerminalCenterODEParams{T, :gaussian}, t) where T
+    @unpack cd40_max_signal = p
+    @unpack cd40_max_signal_centered_on_timestep = p
+    @unpack cd40_max_signal_timestep_std = p
+ 
+    return gaussian_regulatory_signal(; 
+        peak = cd40_max_signal,
+        μ = cd40_max_signal_centered_on_timestep,
+        σ = cd40_max_signal_timestep_std,
+        t = t)
+end 
+
+function CD40(u, p::GerminalCenterODEParams{T, :reciprocal}, t) where T
+    @unpack cd₀, kb
+    p, b, r = u
+    return CD40(; cd₀, kb, b)
+end 
 
 """
     gaussian_regulatory_signal(; peak, μ, σ, t)
@@ -247,12 +289,13 @@ irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, kᵣ) = (μᵣ + cd40 + σᵣ)/(λ
 """
     germinal_center_exit_pathway_jacobian(u, p, t)
 
-Return Jacobian of `germinal_center_exit_pathway_rule`.
+Return Jacobian of `germinal_center_exit_pathway_rule` w/ reciprocal BCR/CD40.
 
 See `notebooks/germinal_cell_jacobian.pdf` for the source that generated the
 symbolic Jacobian.
 """
-function germinal_center_exit_pathway_jacobian(u, p, t)
+function germinal_center_exit_pathway_jacobian(
+    u, p::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
     @unpack μₚ, μb, μᵣ = p
     @unpack σₚ, σb, σᵣ = p
     @unpack kₚ, kb, kᵣ = p
@@ -282,14 +325,16 @@ function germinal_center_exit_pathway_jacobian(u, p, t)
 end 
 
 """
-    germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
+    germinal_center_exit_pathway_jacobian(
+        u, p::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
 
-Return Jacobian of `germinal_center_gaussian_exit_pathway_rule`.
+Return Jacobian of `germinal_center_exit_pathway_rule` w/ gaussian BCR/CD40.
 
 See `notebooks/germinal_cell_gaussian_jacobian.pdf` for the source that 
 generated the symbolic Jacobian.
 """
-function germinal_center_gaussian_exit_pathway_jacobian(u, p, t)
+function germinal_center_exit_pathway_jacobian(
+    u, p::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
     # parameters 
     @unpack μₚ, μb, μᵣ = p
     @unpack σₚ, σb, σᵣ = p
