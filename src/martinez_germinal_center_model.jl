@@ -114,6 +114,17 @@ exit pathway with coupled BCR and CD40 regulatory signals.
 """
 function germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
     return CoupledODEs(germinal_center_exit_pathway_rule, u0, params)
+end
+
+"""
+
+Used in Figure S1 (possibly others)??
+
+# References
+[1] : Equations S6 and S7 from Martinez2012
+"""
+function bcr_subnetwork 
+    
 end 
 
 
