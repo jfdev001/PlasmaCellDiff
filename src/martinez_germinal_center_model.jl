@@ -95,8 +95,8 @@ function germinal_center_exit_pathway_rule(
     r_scaled = transcription_factor_scaler(kr, r)
 
     # regulatory signals
-    bcr = BCR(; u, params, t)
-    cd40 = CD40(; u, params, t)
+    bcr = BCR(u, params, t)
+    cd40 = CD40(u, params, t)
 
     # system describing evolution of transcription factors in germinal center
     pdot = μp + σp*kb_scaled + σp*r_scaled - λp*p
@@ -142,12 +142,12 @@ Return BCR gene regulatory signal.
 """
 BCR(; bcr0, kb, b) = bcr0*dissociation_scaler(kb, b)
 
-function BCR(; u, params::GerminalCenterODEParams{:constant, T}, t) where T
+function BCR(u, params::GerminalCenterODEParams{:constant, T}, t) where T
     @unpack bcr_constant = params
     return bcr_constant 
 end 
 
-function BCR(; u, params::GerminalCenterODEParams{:gaussian, T}, t) where T 
+function BCR(u, params::GerminalCenterODEParams{:gaussian, T}, t) where T 
     # gaussian regulation parameters 
     @unpack bcr_max_signal = params
     @unpack bcr_max_signal_centered_on_timestep = params
@@ -160,7 +160,7 @@ function BCR(; u, params::GerminalCenterODEParams{:gaussian, T}, t) where T
         t = t)
 end 
 
-function BCR(; u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
+function BCR(u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
     @unpack bcr0, kb = params
     p, b, r = u
     return BCR(; bcr0, kb, b)

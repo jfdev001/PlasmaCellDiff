@@ -6,13 +6,20 @@ Repository for the period 1 2023 masters course Bioinformatics 1 at the Universi
 
 Things to include in order of priority
 
-* CDR40 and BCR signals (use trajectory outputs and compute per timestep)
-* Read Chaper 8 on Cell for understanding derivations of Martinez2012 model
-* Interactive trajectory/3D trajectory and sensitivity
+* [X] CDR40 and BCR signals (use trajectory outputs and compute per timestep)
+* [X] Read Chaper 8 on Cell for understanding derivations of Martinez2012 model
+* [X] Interactive trajectory/3D trajectory 
 * Bifurcation analysis
 * Sensitivity analysis
 * Chaos or other entropy?
 * Critical points
+
+## Progress Meeting 3 (2023-09-29)
+
+* [] Figure S1
+    * Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
+* [] Figure 2
+* [] FIgure 3
 
 # References
 
