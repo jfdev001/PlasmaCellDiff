@@ -22,40 +22,40 @@ are modelled. Note that `:reciprocal` uses equations S4 and S5 defined
 explicitly in Martinez2012.
 """
 @kwdef mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
-    μₚ::Float64 = 10e-6, # Basal transcription rate
-    μb::Float64 = 2.0, 
-    μᵣ::Float64 = 0.1,  
+    μp::Float64 = 10e-6 # Basal transcription rate
+    μb::Float64 = 2.0 
+    μr::Float64 = 0.1  
 
-    σₚ::Float64 = 9.0,   # Maximum induced transcription rate
-    σb::Float64 = 100.0, 
-    σᵣ::Float64 = 2.6,
+    σp::Float64 = 9.0   # Maximum induced transcription rate
+    σb::Float64 = 100.0 
+    σr::Float64 = 2.6
 
-    kₚ::Float64 = 1.0, 
-    kb::Float64 = 1.0, 
-    kᵣ::Float64 = 1.0, 
+    kp::Float64 = 1.0 
+    kb::Float64 = 1.0 
+    kr::Float64 = 1.0 
 
-    λₚ::Float64 = 1.0,   # Degradation rate 
-    λb::Float64 = 1.0, 
-    λᵣ::Float64 = 1.0,
+    λp::Float64 = 1.0   # Degradation rate 
+    λb::Float64 = 1.0 
+    λr::Float64 = 1.0
 
     # BCR and CD40 gene regulation as constant in time
-    bcr_constant::Float64 = 15.0, # from figure S1
-    cd40_constant::Float64 = NaN,
+    bcr_constant::Float64 = 15.0 # from figure S1
+    cd40_constant::Float64 = NaN
 
     # Reciprocal function BCR and CD40 regulation parameters
-    bcr₀::Float64 = 0.05, # Range of BCR-induced degradation of BCL6 in [0, 10]
-    cd₀::Float64 = 0.015, # Range of CD40-induced transcription of IRF4 in [0, 1] 
-    C₀::Float64 = 10e-8,  # Appears to be unused
+    bcr0::Float64 = 0.05 # Range of BCR-induced degradation of BCL6 in [0, 10]
+    cd0::Float64 = 0.015 # Range of CD40-induced transcription of IRF4 in [0, 1] 
+    C0::Float64 = 10e-8  # Appears to be unused
 
     # Gaussian BCR and CD40 regulation parameters
     # determined experimentally in 
     # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
-    bcr_max_signal::Float64 = 0.1875,
-    bcr_max_signal_centered_on_timestep::Float64 = 50, 
-    bcr_max_signal_timestep_std::Float64 = 1,
+    bcr_max_signal::Float64 = 0.1875
+    bcr_max_signal_centered_on_timestep::Float64 = 50
+    bcr_max_signal_timestep_std::Float64 = 1
 
-    cd40_max_signal::Float64 = 0.0375,
-    cd40_max_signal_centered_on_timestep::Float64 = 60,
+    cd40_max_signal::Float64 = 0.0375
+    cd40_max_signal_centered_on_timestep::Float64 = 60
     cd40_max_signal_timestep_std::Float64 = 1
 end
 
@@ -68,7 +68,7 @@ with coupled BCR and CD40 regulatory signals.
 # Arguments 
 - `u`: State vector of dynamical system. The elements of this vector represent
     protein levels of `p` (BLIMP1), `b` (BCL6), and `r` (IRF4).
-- `p::GerminalCenterODEParams`: Typed mutable struct whose parametrized
+- `params::GerminalCenterODEParams`: Typed mutable struct whose parametrized
     symbols are in `[:gaussian, :constant, :reciprocal]` and which determine
     the BCR/CD40 regulatory signaling mechanism.
 - `t`: Current time for numerical integration. No need to pass an argument here
@@ -80,28 +80,28 @@ with coupled BCR and CD40 regulatory signals.
 function germinal_center_exit_pathway_rule(
     u, params::GerminalCenterODEParams, t)
     # parameters 
-    @unpack μₚ, μb, μᵣ = params
-    @unpack σₚ, σb, σᵣ = params
-    @unpack kₚ, kb, kᵣ = params
-    @unpack λₚ, λb, λᵣ = params
+    @unpack μp, μb, μr = params
+    @unpack σp, σb, σr = params
+    @unpack kp, kb, kr = params
+    @unpack λp, λb, λr = params
 
     # transcription factor state variables 
     p, b, r = u
 
     # compute scaled dissociation constants and protein levels
-    kp_scaled = dissociation_scaler(kₚ, p)
+    kp_scaled = dissociation_scaler(kp, p)
     kb_scaled = dissociation_scaler(kb, b)
-    kr_scaled = dissociation_scaler(kᵣ, r)
-    r_scaled = transcription_factor_scaler(kᵣ, r)
+    kr_scaled = dissociation_scaler(kr, r)
+    r_scaled = transcription_factor_scaler(kr, r)
 
     # regulatory signals
-    bcr = BCR(; u, p = params, t)
-    cd40 = CD40(; u, p = params, t)
+    bcr = BCR(; u, params, t)
+    cd40 = CD40(; u, params, t)
 
     # system describing evolution of transcription factors in germinal center
-    pdot = μₚ + σₚ*kb_scaled + σₚ*r_scaled - λₚ*p
+    pdot = μp + σp*kb_scaled + σp*r_scaled - λp*p
     bdot = μb + σb*kp_scaled*kb_scaled*kr_scaled - (λb + bcr)*b
-    rdot = μᵣ + σᵣ*r_scaled + cd40 - λᵣ*r
+    rdot = μr + σr*r_scaled + cd40 - λr*r
 
     return SVector(pdot, bdot, rdot)
 end
@@ -118,40 +118,40 @@ end
 
 
 """
-    dissociation_scaler(k, uᵢ)
+    dissociation_scaler(k, ui)
 
 Scales dissociation constant k associated with transcription factor uᵢ.
 """
-dissociation_scaler(k, uᵢ) = k^2 / (k^2 + uᵢ^2)
+dissociation_scaler(k, ui) = k^2 / (k^2 + ui^2)
 
 """
-    transcription_factor_scaler(k, uᵢ)
+    transcription_factor_scaler(k, ui)
 
-Scales protein level for transcription factor uᵢ using dissociation constant
+Scales protein level for transcription factor ui using dissociation constant
 k associated with uᵢ.
 """
-transcription_factor_scaler(k, uᵢ) = uᵢ^2 / (k^2 + uᵢ^2)
+transcription_factor_scaler(k, ui) = ui^2 / (k^2 + ui^2)
 
 """
-    BCR(; bcr₀, kb, b)
+    BCR(; bcr0, kb, b)
 
 Return BCR gene regulatory signal.
 
 # References
 [1] : Equation S4 from Martinez2012
 """
-BCR(; bcr₀, kb, b) = bcr₀*dissociation_scaler(kb, b)
+BCR(; bcr0, kb, b) = bcr0*dissociation_scaler(kb, b)
 
-function BCR(; u, p::GerminalCenterODEParams{:constant, T}, t) where T
-    @unpack bcr_constant = p
+function BCR(; u, params::GerminalCenterODEParams{:constant, T}, t) where T
+    @unpack bcr_constant = params
     return bcr_constant 
 end 
 
-function BCR(; u, p::GerminalCenterODEParams{:gaussian, T}, t) where T 
+function BCR(; u, params::GerminalCenterODEParams{:gaussian, T}, t) where T 
     # gaussian regulation parameters 
-    @unpack bcr_max_signal = p
-    @unpack bcr_max_signal_centered_on_timestep = p
-    @unpack bcr_max_signal_timestep_std = p
+    @unpack bcr_max_signal = params
+    @unpack bcr_max_signal_centered_on_timestep = params
+    @unpack bcr_max_signal_timestep_std = params
 
     return gaussian_regulatory_signal(;
         peak = bcr_max_signal, 
@@ -160,31 +160,31 @@ function BCR(; u, p::GerminalCenterODEParams{:gaussian, T}, t) where T
         t = t)
 end 
 
-function BCR(; u, p::GerminalCenterODEParams{:reciprocal, T}, t) where T
-    @unpack bcr₀, kb
+function BCR(; u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
+    @unpack bcr0, kb = params
     p, b, r = u
-    return BCR(; bcr₀, kb, b)
+    return BCR(; bcr0, kb, b)
 end 
 
 """
-    CD40(; cd₀, kb, b)
+    CD40(; cd0, kb, b)
 
 Return CD40 gene regulatory signal.
 
 # References
 [1] : Equation S5 from Martinez2012
 """
-CD40(; cd₀, kb, b) = cd₀*dissociation_scaler(kb, b)
+CD40(; cd0, kb, b) = cd0*dissociation_scaler(kb, b)
 
-function CD40(u, p::GerminalCenterODEParams{T, :constant}, t) where T
-    @unpack cd40_constant = p
+function CD40(u, params::GerminalCenterODEParams{T, :constant}, t) where T
+    @unpack cd40_constant = params
     return cd40_constant
 end
 
-function CD40(u, p::GerminalCenterODEParams{T, :gaussian}, t) where T
-    @unpack cd40_max_signal = p
-    @unpack cd40_max_signal_centered_on_timestep = p
-    @unpack cd40_max_signal_timestep_std = p
+function CD40(u, params::GerminalCenterODEParams{T, :gaussian}, t) where T
+    @unpack cd40_max_signal = params
+    @unpack cd40_max_signal_centered_on_timestep = params
+    @unpack cd40_max_signal_timestep_std = params
  
     return gaussian_regulatory_signal(; 
         peak = cd40_max_signal,
@@ -193,10 +193,10 @@ function CD40(u, p::GerminalCenterODEParams{T, :gaussian}, t) where T
         t = t)
 end 
 
-function CD40(u, p::GerminalCenterODEParams{T, :reciprocal}, t) where T
-    @unpack cd₀, kb
+function CD40(u, params::GerminalCenterODEParams{T, :reciprocal}, t) where T
+    @unpack cd0, kb = params
     p, b, r = u
-    return CD40(; cd₀, kb, b)
+    return CD40(; cd0, kb, b)
 end 
 
 """
@@ -215,22 +215,22 @@ clearly not necessary for the scope of this project.
 gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 
 """
-    irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, k) 
+    irf4_bistability(; μr, cd40, σr, λr, k) 
 
 Return bistability constraint for IRF4 written as a function of relevant IRF4
 kinetic parameters.
 
-NOTE: Maybe altering σᵣ is what leads to the Figures 2 (β ∈ {1.5, 1.8, 2})
+NOTE: Maybe altering σr is what leads to the Figures 2 (β ∈ {1.5, 1.8, 2})
 
 # References
 [1] : Equation S9 (i.e., β = ...) from Martinez2012
 """
-irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, kᵣ) = (μᵣ + cd40 + σᵣ)/(λᵣ*kᵣ)
+irf4_bistability(; μr, cd40, σr, λr, kr) = (μr + cd40 + σr)/(λr*kr)
 
 
 """
     germinal_center_exit_pathway_jacobian(
-        u, p::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
+        u, params::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ reciprocal BCR/CD40.
 
@@ -240,27 +240,27 @@ symbolic Jacobian.
 TODO: Check if both are requried to be reciprocal for this to be true.
 """
 function germinal_center_exit_pathway_jacobian(
-    u, p::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
+    u, params::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
+    @unpack μp, μb, μr = params 
+    @unpack σp, σb, σr = params
+    @unpack kp, kb, kr = params 
+    @unpack λp, λb, λr = params 
+    @unpack bcr0, cd0, C0 = params
 
     p, b, r = u
 
-    J_11 = -λₚ
-    J_12 = -(2*b*kb^2*σₚ)/(b^2 + kb^2)^2 
-    J_13 = -(2*r^3*σₚ)/(r^2 + kᵣ^2)^2 + (2*r*σₚ)/(r^2 + kᵣ^2) 
+    J_11 = -λp
+    J_12 = -(2*b*kb^2*σp)/(b^2 + kb^2)^2 
+    J_13 = -(2*r^3*σp)/(r^2 + kr^2)^2 + (2*r*σp)/(r^2 + kr^2) 
 
-    J_21 = -(2*p*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)^2*(r^2 + kᵣ^2))
-    J_22 = (2*b^2*bcr₀*kb^2)/(b^2+kb^2)^2 - (bcr₀*kb^2)/(b^2 + kb^2) - 
-        λb - (2*b*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)^2*(p^2 + kₚ^2)*(r^2 + kᵣ^2))
-    J_23 = -(2*r*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)*(r^2 + kᵣ^2)^2)
+    J_21 = -(2*p*kb^2*kp^2*kr^2*σb)/((b^2 + kb^2)*(p^2 + kp^2)^2*(r^2 + kr^2))
+    J_22 = (2*b^2*bcr0*kb^2)/(b^2+kb^2)^2 - (bcr0*kb^2)/(b^2 + kb^2) - 
+        λb - (2*b*kb^2*kp^2*kr^2*σb)/((b^2 + kb^2)^2*(p^2 + kp^2)*(r^2 + kr^2))
+    J_23 = -(2*r*kb^2*kp^2*kr^2*σb)/((b^2 + kb^2)*(p^2 + kp^2)*(r^2 + kr^2)^2)
  
     J_31 = 0
-    J_32 = -(2*b*cd₀*kb^2)/(b^2 + kb^2)^2
-    J_33 = -λᵣ - (2*r^3*σᵣ)/(r^2 + kᵣ^2)^2 + (2*r*σᵣ)/(r^2 + kᵣ^2)
+    J_32 = -(2*b*cd0*kb^2)/(b^2 + kb^2)^2
+    J_33 = -λr - (2*r^3*σr)/(r^2 + kr^2)^2 + (2*r*σr)/(r^2 + kr^2)
 
     J = [J_11 J_12 J_13
          J_21 J_22 J_23
@@ -271,7 +271,7 @@ end
 
 """
     germinal_center_exit_pathway_jacobian(
-        u, p::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
+        u, params::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ gaussian BCR/CD40.
 
@@ -281,13 +281,13 @@ generated the symbolic Jacobian.
 TODO: check if both are required to be gaussian for this Jacobian to be correct.
 """
 function germinal_center_exit_pathway_jacobian(
-    u, p::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
+    u, params::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
     # parameters 
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
+    @unpack μp, μb, μr = params 
+    @unpack σp, σb, σr = params 
+    @unpack kp, kb, kr = params 
+    @unpack λp, λb, λr = params 
+    @unpack bcr0, cd0, C0 = params
    
     # gaussian regulation parameters 
     @unpack bcr_max_signal = p
@@ -300,26 +300,26 @@ function germinal_center_exit_pathway_jacobian(
 
     p, b, r = u
 
-    J_11 = -λₚ
-    J_12 = -(2*b*kb^2*σₚ)/(b^2 + kb^2)^2 
-    J_13 = -(2*r^3*σₚ)/(r^2 + kᵣ^2)^2 + (2*r*σₚ)/(r^2 + kᵣ^2) 
+    J_11 = -λp
+    J_12 = -(2*b*kb^2*σp)/(b^2 + kb^2)^2 
+    J_13 = -(2*r^3*σp)/(r^2 + kr^2)^2 + (2*r*σp)/(r^2 + kr^2) 
 
-    J_21 = -(2*p*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)^2*(r^2 + kᵣ^2))
+    J_21 = -(2*p*kb^2*kp^2*kr^2*σb)/((b^2 + kb^2)*(p^2 + kp^2)^2*(r^2 + kr^2))
     
     bcr_signal_numerator = bcr_max_signal*
         exp(-(t - bcr_max_signal_centered_on_timestep)^2/
         (2*bcr_max_signal_timestep_std^2))  
     bcr_signal_denominator = (sqrt(2*π) * bcr_max_signal_timestep_std)
     bcr_signal_term = bcr_signal_numerator/bcr_signal_denominator 
-    dissociation_prod_term = (2*b*kb^2*kₚ^2*kᵣ^2*σb)/
-        ((b^2+kb^2)^2*(p^2+kₚ^2)*(r^2+kᵣ^2))
+    dissociation_prod_term = (2*b*kb^2*kp^2*kr^2*σb)/
+        ((b^2+kb^2)^2*(p^2+kp^2)*(r^2+kr^2))
     J_22 = -bcr_signal_term - λb - dissociation_prod_term 
 
-    J_23 = -(2*r*kb^2*kₚ^2*kᵣ^2*σb)/((b^2 + kb^2)*(p^2 + kₚ^2)*(r^2 + kᵣ^2)^2)
+    J_23 = -(2*r*kb^2*kp^2*kr^2*σb)/((b^2 + kb^2)*(p^2 + kp^2)*(r^2 + kr^2)^2)
 
     J_31 = 0
     J_32 = 0
-    J_33 = -λᵣ - (2*r^3*σᵣ)/((r^2 + kᵣ^2)^2) + (2*r*σᵣ)/(r^2 + kᵣ^2)
+    J_33 = -λr - (2*r^3*σr)/((r^2 + kr^2)^2) + (2*r*σr)/(r^2 + kr^2)
 
     J = [J_11 J_12 J_13
          J_21 J_22 J_23
