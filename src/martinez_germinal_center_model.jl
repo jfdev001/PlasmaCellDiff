@@ -12,9 +12,16 @@ using UnPack
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_5::Float64 = 0.08
 const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
 
-# germinal_center_ode_params
-@kwdef mutable struct 
-    GerminalCenterODEParams{BCRMethod, CD40Method}
+"""
+    mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
+
+Parameters used for dynamical systems simulating germinal center regulation.
+`BCRMethod` and `CD40Method` are symbols in 
+`[:constant, :gaussian, :reciprocal]` that determine how CD40 and BCR
+are modelled. Note that `:reciprocal` uses equations S4 and S5 defined 
+explicitly in Martinez2012.
+"""
+@kwdef mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
     μₚ::Float64 = 10e-6, # Basal transcription rate
     μb::Float64 = 2.0, 
     μᵣ::Float64 = 0.1,  
@@ -27,33 +34,33 @@ const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
     kb::Float64 = 1.0, 
     kᵣ::Float64 = 1.0, 
 
-    λₚ::Float64=> 1.0,   # Degradation rate 
-    λb::Float64=> 1.0, 
-    λᵣ::Float64=> 1.0,
+    λₚ::Float64 = 1.0,   # Degradation rate 
+    λb::Float64 = 1.0, 
+    λᵣ::Float64 = 1.0,
 
     # BCR and CD40 gene regulation as constant in time
-    bcr_constant => 15.0, # from figure S1
-    cd40_constant => NaN,
+    bcr_constant::Float64 = 15.0, # from figure S1
+    cd40_constant::Float64 = NaN,
 
     # Reciprocal function BCR and CD40 regulation parameters
-    :bcr₀ => 0.05, # Range of BCR-induced degradation of BCL6 in [0, 10]
-    :cd₀ => 0.015,  # Range of CD40-induced transcription of IRF4 in [0, 1] 
-    :C₀ => 10e-8, 
+    bcr₀::Float64 = 0.05, # Range of BCR-induced degradation of BCL6 in [0, 10]
+    cd₀::Float64 = 0.015, # Range of CD40-induced transcription of IRF4 in [0, 1] 
+    C₀::Float64 = 10e-8,  # Appears to be unused
 
     # Gaussian BCR and CD40 regulation parameters
     # determined experimentally in 
     # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
-    :bcr_max_signal => 0.1875,
-    :bcr_max_signal_centered_on_timestep => 50, 
-    :bcr_max_signal_timestep_std => 1,
+    bcr_max_signal::Float64 = 0.1875,
+    bcr_max_signal_centered_on_timestep::Float64 = 50, 
+    bcr_max_signal_timestep_std::Float64 = 1,
 
-    :cd40_max_signal => 0.0375,
-    :cd40_max_signal_centered_on_timestep => 60,
-    :cd40_max_signal_timestep_std => 1,
+    cd40_max_signal::Float64 = 0.0375,
+    cd40_max_signal_centered_on_timestep::Float64 = 60,
+    cd40_max_signal_timestep_std::Float64 = 1
 end
 
 """
-    germinal_center_exit_pathway_rule(u, p, t)
+    germinal_center_exit_pathway_rule(u, params::GerminalCenterODEParams, t)
 
 Return rule for gene regulatory module controlling germinal center exit pathway
 with coupled BCR and CD40 regulatory signals.
@@ -61,20 +68,22 @@ with coupled BCR and CD40 regulatory signals.
 # Arguments 
 - `u`: State vector of dynamical system. The elements of this vector represent
     protein levels of `p` (BLIMP1), `b` (BCL6), and `r` (IRF4).
-- `p`: Parameters for the model.
+- `p::GerminalCenterODEParams`: Typed mutable struct whose parametrized
+    symbols are in `[:gaussian, :constant, :reciprocal]` and which determine
+    the BCR/CD40 regulatory signaling mechanism.
 - `t`: Current time for numerical integration. No need to pass an argument here
     since numerical integration is handled with builtin solvers.
 
 # References
 [1] : Equations S1 - S3 from Martinez2012
 """
-function germinal_center_exit_pathway_rule(u, p, t)
+function germinal_center_exit_pathway_rule(
+    u, params::GerminalCenterODEParams, t)
     # parameters 
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
+    @unpack μₚ, μb, μᵣ = params
+    @unpack σₚ, σb, σᵣ = params
+    @unpack kₚ, kb, kᵣ = params
+    @unpack λₚ, λb, λᵣ = params
 
     # transcription factor state variables 
     p, b, r = u
@@ -86,8 +95,8 @@ function germinal_center_exit_pathway_rule(u, p, t)
     r_scaled = transcription_factor_scaler(kᵣ, r)
 
     # regulatory signals
-    bcr = BCR(; bcr₀, kb, b)
-    cd40 = CD40(; cd₀, kb, b)
+    bcr = BCR(; u, p = params, t)
+    cd40 = CD40(; u, p = params, t)
 
     # system describing evolution of transcription factors in germinal center
     pdot = μₚ + σₚ*kb_scaled + σₚ*r_scaled - λₚ*p
@@ -98,82 +107,15 @@ function germinal_center_exit_pathway_rule(u, p, t)
 end
 
 """
-    germinal_center_gaussian_exit_pathway_rule(u, p, t)
-
-Return rule for gene regulatory module controlling germinal center exit pathway
-with coupled gaussian BCR and CD40 gene regulatory signals.
-
-Implements CD40 and BCR gene regulation as gaussian distribution centered
-on a different timesteps as well as having different maximum signals
-"""
-function germinal_center_gaussian_exit_pathway_rule(u, p, t)
-    # parameters 
-    @unpack μₚ, μb, μᵣ = p
-    @unpack σₚ, σb, σᵣ = p
-    @unpack kₚ, kb, kᵣ = p
-    @unpack λₚ, λb, λᵣ = p
-    @unpack bcr₀, cd₀, C₀ = p
-   
-    # gaussian regulation parameters 
-    @unpack bcr_max_signal = p
-    @unpack bcr_max_signal_centered_on_timestep = p
-    @unpack bcr_max_signal_timestep_std = p
-
-    @unpack cd40_max_signal = p
-    @unpack cd40_max_signal_centered_on_timestep = p
-    @unpack cd40_max_signal_timestep_std = p
-
-    # transcription factor state variables 
-    p, b, r = u
-
-    # compute scaled dissociation constants and protein levels
-    kp_scaled = dissociation_scaler(kₚ, p)
-    kb_scaled = dissociation_scaler(kb, b)
-    kr_scaled = dissociation_scaler(kᵣ, r)
-    r_scaled = transcription_factor_scaler(kᵣ, r)
-
-    # regulatory signals
-    bcr = gaussian_regulatory_signal(; 
-        peak = bcr_max_signal, 
-        μ = bcr_max_signal_centered_on_timestep, 
-        σ = bcr_max_signal_timestep_std,
-        t = t)
-    cd40 = gaussian_regulatory_signal(; 
-        peak = cd40_max_signal,
-        μ = cd40_max_signal_centered_on_timestep,
-        σ = cd40_max_signal_timestep_std,
-        t = t)
-
-    # system describing evolution of transcription factors in germinal center
-    pdot = μₚ + σₚ*kb_scaled + σₚ*r_scaled - λₚ*p
-    bdot = μb + σb*kp_scaled*kb_scaled*kr_scaled - (λb + bcr)*b
-    rdot = μᵣ + σᵣ*r_scaled + cd40 - λᵣ*r
-
-    return SVector(pdot, bdot, rdot)
-end 
-
-"""
-    germinal_center_exit_pathway(u0, params) 
+    germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
 
 Return CoupledODEs model for gene regulatory module controlling germinal center 
 exit pathway with coupled BCR and CD40 regulatory signals. 
 """
-function germinal_center_exit_pathway(u0, params) 
+function germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
     return CoupledODEs(germinal_center_exit_pathway_rule, u0, params)
 end 
 
-"""
-    germinal_center_gaussian_exit_pathway(u0, params) 
-
-Return CoupledODEs model for gene regulatory module controlling germinal center 
-exit pathway with gaussian BCR and CD40 regulatory signals. 
-
-TODO: Should a seed be set?? If so where? Does it make sense to have
-the calling of the random distribution func in the ds rule??
-"""
-function germinal_center_gaussian_exit_pathway(u0, params) 
-    return CoupledODEs(germinal_center_gaussian_exit_pathway_rule, u0, params)
-end 
 
 """
     dissociation_scaler(k, uᵢ)
@@ -287,12 +229,15 @@ irf4_bistability(; μᵣ, cd40, σᵣ, λᵣ, kᵣ) = (μᵣ + cd40 + σᵣ)/(λ
 
 
 """
-    germinal_center_exit_pathway_jacobian(u, p, t)
+    germinal_center_exit_pathway_jacobian(
+        u, p::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ reciprocal BCR/CD40.
 
 See `notebooks/germinal_cell_jacobian.pdf` for the source that generated the
 symbolic Jacobian.
+
+TODO: Check if both are requried to be reciprocal for this to be true.
 """
 function germinal_center_exit_pathway_jacobian(
     u, p::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
@@ -332,6 +277,8 @@ Return Jacobian of `germinal_center_exit_pathway_rule` w/ gaussian BCR/CD40.
 
 See `notebooks/germinal_cell_gaussian_jacobian.pdf` for the source that 
 generated the symbolic Jacobian.
+
+TODO: check if both are required to be gaussian for this Jacobian to be correct.
 """
 function germinal_center_exit_pathway_jacobian(
     u, p::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
@@ -380,5 +327,3 @@ function germinal_center_exit_pathway_jacobian(
 
     SMatrix{3, 3}(J)
 end 
-
-
