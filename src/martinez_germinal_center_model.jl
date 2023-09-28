@@ -20,6 +20,24 @@ Parameters used for dynamical systems simulating germinal center regulation.
 `[:constant, :gaussian, :reciprocal]` that determine how CD40 and BCR
 are modelled. Note that `:reciprocal` uses equations S4 and S5 defined 
 explicitly in Martinez2012.
+
+TODO: This could be made more efficient by using design decision
+inspired by Chaitanya Kumar (and his suggestions about solvers used
+in DifferentialEquations.jl) by employing compile time dispatch as well as
+using a non mutable struct (as suggested by 
+https://stackoverflow.com/questions/77188675/overloading-methods-for-parametrized-struct
+```julia
+abstract type AbstractParamType end
+
+struct Exponential <: AbstractParamType end
+struct Gaussian <: AbstractParamType end
+struct Constant <: AbstractParamType end
+struct Reciprocal <: AbstractParamType end
+
+@kwdef mutable struct Params{P1<:AbstractParamType, P2<:AbstractParamType}
+
+compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
+```
 """
 @kwdef mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
     μp::Float64 = 10e-6 # Basal transcription rate
@@ -61,7 +79,7 @@ end
 
 function Base.show(io::IO, z::GerminalCenterODEParams)
     propnames = propertynames(z)
-    propvalues = getproperty.(repeat([z], length(propnames)), propnames)
+    propvalues = [getproperty(z, propname_i) for propname_i in propnames]
     println("$(typeof(z))(")
     for i in 1:length(propnames)
         pname = propnames[i]
