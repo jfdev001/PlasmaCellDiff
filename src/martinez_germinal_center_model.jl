@@ -59,6 +59,18 @@ explicitly in Martinez2012.
     cd40_max_signal_timestep_std::Float64 = 1
 end
 
+function Base.show(io::IO, z::GerminalCenterODEParams)
+    propnames = propertynames(z)
+    propvalues = getproperty.(repeat([z], length(propnames)), propnames)
+    println("$(typeof(z))(")
+    for i in 1:length(propnames)
+        pname = propnames[i]
+        pvalue = propvalues[i]
+        println(io, "  $pname = $pvalue")
+    end 
+    println(")")
+end 
+
 """
     germinal_center_exit_pathway_rule(u, params::GerminalCenterODEParams, t)
 
