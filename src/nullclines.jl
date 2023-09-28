@@ -9,7 +9,7 @@ include("common.jl")
 
 ```math
 \\begin{equation}
-\\dot{p} = 0 \\Leftrightarrow  n_p(b) = \\sigma_p + \\sigma_p \\frac{k_b^2}{k_b^2 + b^2}
+\\dot{p} = 0 \\Leftrightarrow  n_p(b) = \\mu_p + \\sigma_p \\frac{k_b^2}{k_b^2 + b^2}
 \\end{equation}
 ```
 
@@ -20,7 +20,7 @@ Return nullcline for BLIMP1 (`p`).
 
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
-function blimp1_nullcline(u, params::GerminalCenterODEParams)     
+function blimp1_nullcline(u, params::GerminalCenterODEParams)
     # parameters 
     @unpack μp, μb = params
     @unpack σp, σb = params
@@ -37,7 +37,24 @@ function blimp1_nullcline(u, params::GerminalCenterODEParams)
     return p_nullcline
 end 
 
-function bcl6_nullcline(u, params::GerminalCenterODEParams) 
+"""
+    bcl6_nullcline(u, params::GerminalCenterODEParams) 
+
+
+```math
+\\begin{equation}
+\\dot{b} = 0 \\Leftrightarrow  n_b(p) = \\mu_b + \\sigma_b + \\frac{k_p^2}{k_p^2 + p^2}
+\\end{equation}
+```
+
+Return nullcline for BCL6 (`b`).
+
+# References
+[1] : Equation S7 from Martinez2012
+
+[2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
+"""
+function bcl6_nullcline(u, params::GerminalCenterODEParams, t)
     # parameters 
     @unpack μp, μb = params
     @unpack σp, σb = params
@@ -47,5 +64,8 @@ function bcl6_nullcline(u, params::GerminalCenterODEParams)
     # transcription factor state variables 
     p, b = u
     
-    
+    kp_scaled = dissociation_scaler(kp, p) 
+    b_nullcline = μb + σb*kp_scaled
+
+    return b_nullcline
 end 
