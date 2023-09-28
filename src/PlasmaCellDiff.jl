@@ -8,5 +8,7 @@ export NORMAL_DISTRIBUTION_PEAK_Y_STD_5, NORMAL_DISTRIBUTION_PEAK_Y_STD_1
 
 include("martinez_germinal_center_model.jl")
 include("nullclines.jl")
+include("jacobian.jl")
+include("common.jl")
 
 end # module PlasmaCellDiff

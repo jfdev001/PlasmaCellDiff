@@ -1,9 +1,19 @@
-# Functions for computing nullclines of equations defined in Martinez2012
+# Functions/models for computing nullclines of equations defined in Martinez2012
 # to model germinal cell center regulation
 
-using PlasmaCellDiff: GerminalCenterODEParams, BCR, CD40
-using PlasmaCellDiff: dissociation_scaler, transcription_factor_scaler
 using UnPack
+include("common.jl")
+
+"""
+
+Used in Figure S1 (possibly others)??
+
+# References
+[1] : Equations S6 and S7 from Martinez2012
+"""
+function bcr_subnetwork 
+        
+end 
 
 """
     blimp1_nullcline(u, params::GerminalCenterODEParams)  
@@ -46,17 +56,7 @@ function bcl6_nullcline(u, params::GerminalCenterODEParams)
     @unpack λp, λb, λr = params
 
     # transcription factor state variables 
-    p, b, r = u
-
-end 
-
-function irf4_nullcline(u, params::GerminalCenterODEParams)
-    # parameters 
-    @unpack μp, μb, μr = params
-    @unpack σp, σb, σr = params
-    @unpack kp, kb, kr = params
-    @unpack λp, λb, λr = params
-
-    # transcription factor state variables 
-    p, b, r = u
+    b, r = u
+    
+    
 end 
