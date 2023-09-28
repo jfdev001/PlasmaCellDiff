@@ -80,7 +80,6 @@ function bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
     @unpack σp, σb = params
     @unpack kp, kb = params
     @unpack λp, λb = params
-    @unpack bcr0 = params
 
     # BLIMP1 and BCL6 protein levels
     p, b = u
