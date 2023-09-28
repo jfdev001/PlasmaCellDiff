@@ -5,6 +5,7 @@
 # B cells and mechanisms of lymphomagenesis. Proc Natl Acad Sci U S A. 2012 Feb 
 # 14; 109(7):2672-7. (aka Martinez2012)
 
+using PlasmaCellDiff
 using DynamicalSystems: SVector, SMatrix, CoupledODEs
 using UnPack
 

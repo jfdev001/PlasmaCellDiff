@@ -14,10 +14,13 @@ Things to include in order of priority
 * Chaos or other entropy?
 * Critical points
 
-## Progress Meeting 3 (2023-09-29)
+## Progress Meeting 3 (2023-10-06)
 
 * [] Figure S1
     * Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
+    * BCR signaling might be increased or decreased by modulating the
+    magnitude of the gaussian peak
+    * 
 * [] Figure 2
 * [] FIgure 3
 

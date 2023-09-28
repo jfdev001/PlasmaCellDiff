@@ -63,16 +63,19 @@ compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
     bcr_max_signal::Float64 = 0.1875
     bcr_max_signal_centered_on_timestep::Float64 = 50
     bcr_max_signal_timestep_std::Float64 = 1
+    # TODO:
+    # bcr_gaussian = Normal(...) # save peak for actual function call
 
     cd40_max_signal::Float64 = 0.0375
     cd40_max_signal_centered_on_timestep::Float64 = 60
     cd40_max_signal_timestep_std::Float64 = 1
+    # cd40_gaussian = Normal(...)
 end
 
 function Base.show(io::IO, z::GerminalCenterODEParams)
     propnames = propertynames(z)
     propvalues = [getproperty(z, propname_i) for propname_i in propnames]
-    println("$(typeof(z))(")
+    println(io, "$(typeof(z))(")
     for i in 1:length(propnames)
         pname = propnames[i]
         pvalue = propvalues[i]

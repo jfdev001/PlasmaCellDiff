@@ -1,8 +1,8 @@
 # Functions/models for computing nullclines of equations defined in Martinez2012
 # to model germinal cell center regulation
 
+using PlasmaCellDiff
 using UnPack
-include("common.jl")
 
 """
     blimp1_nullcline(u, params::GerminalCenterODEParams)  

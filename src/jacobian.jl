@@ -1,5 +1,6 @@
+using PlasmaCellDiff
+using DynamicalSystems: SMatrix
 using UnPack
-include("common.jl")
 
 """
     germinal_center_exit_pathway_jacobian(
