@@ -15,6 +15,8 @@ include("common.jl")
 
 Return nullcline for BLIMP1 (`p`).
 
+TODO: Need to fix these since you're solutions are not correct.
+
 # References
 [1] : Equation S6 from Martinez2012
 

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     72907,       1800]
-NotebookOptionsPosition[     70234,       1749]
-NotebookOutlinePosition[     70705,       1767]
-CellTagsIndexPosition[     70662,       1764]
+NotebookDataLength[     73348,       1822]
+NotebookOptionsPosition[     70677,       1771]
+NotebookOutlinePosition[     71146,       1789]
+CellTagsIndexPosition[     71103,       1786]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -513,40 +513,45 @@ Cell[BoxData[
               Short[
                Or[
                 
-                And[$CellContext`a - 
-                  3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-                  2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w - 
-                  3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w + 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                  2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+                And[$CellContext`a - (
+                   3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+                    3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] > 
-                 0, -$CellContext`a + 
-                  3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-                  2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w + 
-                  3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w - 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                  2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
-$CellContext`w^2)^Rational[1, 2] > 0], $CellContext`a - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w + 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+                 0, -$CellContext`a + (
+                    3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w + ((
+                    3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w - ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
+$CellContext`w^2)^Rational[1, 2] > 
+                 0], $CellContext`a - (
+                  3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+                   3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 
-                0, -$CellContext`a + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w - 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+                0, -$CellContext`a + (
+                   3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w + ((
+                    3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ], 
             "IconizedCustomName", StripOnInput -> False], 
            GridBox[{{
@@ -563,33 +568,40 @@ $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ],
              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
            Dynamic[Typeset`open]}, "IconizedObject"]], 
         Or[
-         And[$CellContext`a - 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-           2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w - 
-           3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w + 
-           2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-           2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+         And[$CellContext`a - (
+            3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+              2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+             3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w + ((
+              2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+           2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                 1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
              Rational[1, 2] > 
-          0, -$CellContext`a + 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-           2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w + 
-           3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w - 
-           2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-           2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
-             Rational[1, 2] > 0], $CellContext`a - 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w - 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+          0, -$CellContext`a + (
+             3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w + ((
+              3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w - \
+((2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+           2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                 1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
+             Rational[1, 2] > 
+          0], $CellContext`a - (
+           3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+            3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 
-         0, -$CellContext`a + 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w + 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+         0, -$CellContext`a + (
+            3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) $CellContext`w + \
+((3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 0], SelectWithContents -> True, Selectable -> 
         False]},
       "ConditionalExpression"]}], "}"}], ",", 
@@ -711,23 +723,25 @@ $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ],
                Short[#, 7]& ]], Annotation[#, 
               Short[
                
-               Or[$CellContext`a - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w + 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+               Or[$CellContext`a - (
+                  3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+                   3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 
-                0, -$CellContext`a + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w - 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+                0, -$CellContext`a + (
+                   3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w + ((
+                    3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ], 
             "IconizedCustomName", StripOnInput -> False], 
            GridBox[{{
@@ -743,19 +757,22 @@ $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ],
             GridBoxItemSize -> {
              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
            Dynamic[Typeset`open]}, "IconizedObject"]], 
-        Or[$CellContext`a - 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w - 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+        Or[$CellContext`a - (
+           3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+            3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 
-         0, -$CellContext`a + 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w + 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+         0, -$CellContext`a + (
+            3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) $CellContext`w + \
+((3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 0], SelectWithContents -> True, Selectable -> 
         False]},
       "ConditionalExpression"]}], "}"}], ",", 
@@ -877,23 +894,25 @@ $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ],
                Short[#, 7]& ]], Annotation[#, 
               Short[
                
-               Or[$CellContext`a - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w - 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w + 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+               Or[$CellContext`a - (
+                  3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+                   3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w + ((
+                    2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 
-                0, -$CellContext`a + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-                 2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) \
-$CellContext`w + 
-                 3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) \
-$CellContext`w - 2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-                 2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-                    1 - $CellContext`b + $CellContext`b^2)^3 \
+                0, -$CellContext`a + (
+                   3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w + ((
+                    3 (-1 + $CellContext`b)^(-2))/$CellContext`b) \
+$CellContext`w - ((
+                   2 (-1 + $CellContext`b)^(-2)) $CellContext`b) \
+$CellContext`w + 2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                    1 - $CellContext`b + $CellContext`b^2)^3) \
 $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ], 
             "IconizedCustomName", StripOnInput -> False], 
            GridBox[{{
@@ -909,19 +928,22 @@ $CellContext`w^2)^Rational[1, 2] < 0], 7], "Tooltip"]& ],
             GridBoxItemSize -> {
              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
            Dynamic[Typeset`open]}, "IconizedObject"]], 
-        Or[$CellContext`a - 3 (-1 + $CellContext`b)^(-2) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w - 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w + 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+        Or[$CellContext`a - (
+           3 (-1 + $CellContext`b)^(-2)) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) \
+$CellContext`w - ((
+            3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w + ((
+             2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 
-         0, -$CellContext`a + 3 (-1 + $CellContext`b)^(-2) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b^(-2) $CellContext`w + 
-          3 (-1 + $CellContext`b)^(-2) $CellContext`b^(-1) $CellContext`w - 
-          2 (-1 + $CellContext`b)^(-2) $CellContext`b $CellContext`w + 
-          2 ((-1 + $CellContext`b)^(-4) $CellContext`b^(-4) (
-               1 - $CellContext`b + $CellContext`b^2)^3 $CellContext`w^2)^
+         0, -$CellContext`a + (
+            3 (-1 + $CellContext`b)^(-2)) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b^(-2)) $CellContext`w + \
+((3 (-1 + $CellContext`b)^(-2))/$CellContext`b) $CellContext`w - ((
+            2 (-1 + $CellContext`b)^(-2)) $CellContext`b) $CellContext`w + 
+          2 ((((-1 + $CellContext`b)^(-4) $CellContext`b^(-4)) (
+                1 - $CellContext`b + $CellContext`b^2)^3) $CellContext`w^2)^
             Rational[1, 2] < 0], SelectWithContents -> True, Selectable -> 
         False]},
       "ConditionalExpression"]}], "}"}]}], "}"}]], "Output",
@@ -1748,7 +1770,7 @@ Cell[BoxData["\[IndentingNewLine]"], "Input",
 998222460447"]
 },
 WindowSize->{718.5, 758.25},
-WindowMargins->{{Automatic, -1.5}, {Automatic, 0}},
+WindowMargins->{{Automatic, -3}, {Automatic, 0}},
 TaggingRules-><|"TryRealOnly" -> False|>,
 Magnification:>1.3 Inherited,
 FrontEndVersion->"13.2 for Linux x86 (64-bit) (January 31, 2023)",
@@ -1776,32 +1798,32 @@ Cell[5636, 160, 5043, 154, 431, "Output",ExpressionUUID->"84b18155-de6e-494f-91b
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[10716, 319, 1154, 29, 172, "Code",ExpressionUUID->"19f99d81-5be4-41c7-b5b5-a5b24b8f55c4"],
-Cell[11873, 350, 26216, 578, 156, "Output",ExpressionUUID->"9f1212d0-baee-4d7f-969a-019e543ea259"]
+Cell[11873, 350, 26659, 600, 156, "Output",ExpressionUUID->"9f1212d0-baee-4d7f-969a-019e543ea259"]
 }, Open  ]],
-Cell[38104, 931, 22920, 550, 855, "Input",ExpressionUUID->"72ae0d71-878a-4478-8600-126876294910"],
+Cell[38547, 953, 22920, 550, 855, "Input",ExpressionUUID->"72ae0d71-878a-4478-8600-126876294910"],
 Cell[CellGroupData[{
-Cell[61049, 1485, 611, 15, 100, "Code",ExpressionUUID->"08f5dca9-ebd4-45da-81f5-6baa95e73246"],
-Cell[61663, 1502, 456, 13, 75, "Output",ExpressionUUID->"358bca6a-9265-479b-abab-2dca7220a11f"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[62156, 1520, 484, 13, 69, "Code",ExpressionUUID->"aa4e209f-e92d-4ed0-b7eb-59694c545465"],
-Cell[62643, 1535, 325, 8, 46, "Output",ExpressionUUID->"04159ceb-3f95-4f0c-afbc-77f9ae029457"]
+Cell[61492, 1507, 611, 15, 100, "Code",ExpressionUUID->"08f5dca9-ebd4-45da-81f5-6baa95e73246"],
+Cell[62106, 1524, 456, 13, 75, "Output",ExpressionUUID->"358bca6a-9265-479b-abab-2dca7220a11f"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[63005, 1548, 2751, 66, 303, "Code",ExpressionUUID->"a004510c-94f1-454e-820d-9f6bbfe2de8e"],
-Cell[65759, 1616, 477, 13, 46, "Output",ExpressionUUID->"1feab44b-2ff8-4e31-8ff5-49d7cf0c173d"],
-Cell[66239, 1631, 779, 23, 75, "Output",ExpressionUUID->"9878111f-9f36-4994-bc8a-a9648bd184bc"]
+Cell[62599, 1542, 484, 13, 69, "Code",ExpressionUUID->"aa4e209f-e92d-4ed0-b7eb-59694c545465"],
+Cell[63086, 1557, 325, 8, 46, "Output",ExpressionUUID->"04159ceb-3f95-4f0c-afbc-77f9ae029457"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[67055, 1659, 288, 7, 69, "Code",ExpressionUUID->"783eb809-3f75-492a-9493-b48000f14599"],
-Cell[67346, 1668, 647, 16, 68, "Output",ExpressionUUID->"995834ce-5ec7-477c-b3e6-55dc0db43865"]
+Cell[63448, 1570, 2751, 66, 303, "Code",ExpressionUUID->"a004510c-94f1-454e-820d-9f6bbfe2de8e"],
+Cell[66202, 1638, 477, 13, 46, "Output",ExpressionUUID->"1feab44b-2ff8-4e31-8ff5-49d7cf0c173d"],
+Cell[66682, 1653, 779, 23, 75, "Output",ExpressionUUID->"9878111f-9f36-4994-bc8a-a9648bd184bc"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[68030, 1689, 581, 11, 69, "Code",ExpressionUUID->"62dbaadd-c175-420b-9bca-ca557aea393c"],
-Cell[68614, 1702, 361, 9, 36, "Message",ExpressionUUID->"f3549cc0-2149-4315-8a2b-bab5ea20db47"],
-Cell[68978, 1713, 1090, 28, 104, "Output",ExpressionUUID->"037777a1-cddf-457c-af81-0bc3b14b5af8"]
+Cell[67498, 1681, 288, 7, 69, "Code",ExpressionUUID->"783eb809-3f75-492a-9493-b48000f14599"],
+Cell[67789, 1690, 647, 16, 68, "Output",ExpressionUUID->"995834ce-5ec7-477c-b3e6-55dc0db43865"]
 }, Open  ]],
-Cell[70083, 1744, 147, 3, 65, "Input",ExpressionUUID->"dec78c0c-857e-45fe-a8ea-998222460447"]
+Cell[CellGroupData[{
+Cell[68473, 1711, 581, 11, 69, "Code",ExpressionUUID->"62dbaadd-c175-420b-9bca-ca557aea393c"],
+Cell[69057, 1724, 361, 9, 36, "Message",ExpressionUUID->"f3549cc0-2149-4315-8a2b-bab5ea20db47"],
+Cell[69421, 1735, 1090, 28, 104, "Output",ExpressionUUID->"037777a1-cddf-457c-af81-0bc3b14b5af8"]
+}, Open  ]],
+Cell[70526, 1766, 147, 3, 65, "Input",ExpressionUUID->"dec78c0c-857e-45fe-a8ea-998222460447"]
 }
 ]
 *)
