@@ -5,11 +5,11 @@ using PlasmaCellDiff
 using UnPack
 
 """
-    blimp1_nullcline(u, params::GerminalCenterODEParams)  
+    blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)  
 
 ```math
 \\begin{equation}
-\\dot{p} = 0 \\Leftrightarrow p = \\frac{\\mu_p + \\sigma_p \\frac{k_b^2}{k_b^2 + b^2}}{\\lambda_p}
+\\dot{p} = 0 \\Leftrightarrow n_p(b) = p = \\frac{\\mu_p + \\sigma_p \\frac{k_b^2}{k_b^2 + b^2}}{\\lambda_p}
 \\end{equation}
 ```
 
@@ -20,12 +20,12 @@ Return nullcline for BLIMP1 (`p`).
 
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
-function blimp1_nullcline(u, params::GerminalCenterODEParams)
+function blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)
     # parameters 
     @unpack μp, σp, λp, kb = params
 
     # transcription factor state variables 
-    p, b = u
+    b = bcl6_level
 
     kb_scaled = dissociation_scaler(kb, b)
     p_nullcline = (μp + σp*kb_scaled)/λp
@@ -33,13 +33,13 @@ function blimp1_nullcline(u, params::GerminalCenterODEParams)
     return p_nullcline
 end 
 
-"""
-    bcl6_nullcline(u, params::GerminalCenterODEParams) 
+raw"""
+    bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams) 
 
 
 ```math
 \\begin{equation}
-\\dot{b} = 0 \\Leftrightarrow \\frac{k_p \\sqrt{b bcr_0 k_b^2 + (b^2 + k_b^2)(b \\lambda_b - \\mu_b) - k_b^2 \\sigma_b}}{\\sqrt{-b bcr_0 k_b^2 - (b^2 + k_b^2)(b \\lambda_b - \\mu_b)}}
+\\dot{b} = 0 \\Leftrightarrow n_b(b) = p = \\frac{k_p \\sqrt{b(bcr_0)k_b^2 + (b^2 + k_b^2)(b \\lambda_b - \\mu_b) - k_b^2 \\sigma_b}}{\\sqrt{-b (bcr_0) k_b^2 - (b^2 + k_b^2)(b \\lambda_b - \\mu_b)}}
 \\end{equation}
 ```
 
@@ -54,13 +54,12 @@ interpretable, only +b_nullcline is returned.
 
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
-function bcl6_nullcline(u, params::GerminalCenterODEParams, t)
+function bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams)
     # parameters 
     @unpack kp, kb, σb, μb, λb, bcr0 = params
 
-    # transcription factor state variables 
-    p, b = u
-    
+    b = bcl6_level
+ 
     b_nullcline_numerator = kp*sqrt(b*bcr0*kb^2 + (b^2 + kb^2)*(b*λb - μb) 
         - kb^2*σb)
     b_nullcline_denominator = sqrt(-b*bcr0*kb^2 - (b^2 + kb^2)*(b*λb - μb))
