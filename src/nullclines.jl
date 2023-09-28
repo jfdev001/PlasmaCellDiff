@@ -5,17 +5,6 @@ using UnPack
 include("common.jl")
 
 """
-
-Used in Figure S1 (possibly others)??
-
-# References
-[1] : Equations S6 and S7 from Martinez2012
-"""
-function bcr_subnetwork 
-        
-end 
-
-"""
     blimp1_nullcline(u, params::GerminalCenterODEParams)  
 
 ```math
@@ -39,7 +28,7 @@ function blimp1_nullcline(u, params::GerminalCenterODEParams)
     @unpack λp, λb = params
 
     # transcription factor state variables 
-    b, r = u
+    p, b = u
 
     # pdot = 0, therefore p = Integral[pdot] = 0, and n_p(b) = ...
     kb_scaled = dissociation_scaler(kb, b)
@@ -50,13 +39,13 @@ end
 
 function bcl6_nullcline(u, params::GerminalCenterODEParams) 
     # parameters 
-    @unpack μp, μb, μr = params
-    @unpack σp, σb, σr = params
-    @unpack kp, kb, kr = params
-    @unpack λp, λb, λr = params
+    @unpack μp, μb = params
+    @unpack σp, σb = params
+    @unpack kp, kb = params
+    @unpack λp, λb = params
 
     # transcription factor state variables 
-    b, r = u
+    p, b = u
     
     
 end 

@@ -64,3 +64,41 @@ exit pathway with coupled BCR and CD40 regulatory signals.
 function germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
     return CoupledODEs(germinal_center_exit_pathway_rule, u0, params)
 end
+
+
+"""
+    bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
+
+BCR signaling rule decoupled from CD40 signaling and with negligible IRF4 level.
+
+# References
+[1] : Equations S6 and S7 from Martinez2012
+"""
+function bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
+    # parameters 
+    @unpack μp, μb = params
+    @unpack σp, σb = params
+    @unpack kp, kb = params
+    @unpack λp, λb = params
+    @unpack bcr0 = params
+
+    # BLIMP1 and BCL6 protein levels
+    p, b = u
+
+    # scaled dissociation constants
+    kb_scaled = dissociation_scaler(kb, b)
+    kp_scaled = dissociation_scaler(kp, p)
+
+    # regulatory signal
+    bcr = BCR(u, params, t)
+    
+    # BCR subnetwork ODEs
+    pdot = μp + σp*kb_scaled - λp*p
+    bdot = μb + σb*kp_scaled*kb_scaled - (λb + bcr)*b
+
+    return SVector(pdot, bdot)
+end 
+
+function bcr_subnetwork(u0, params::GerminalCenterODEParams)
+    return CoupledODEs(bcr_subnetwork_rule, u0, params)
+end 
