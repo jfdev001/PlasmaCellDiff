@@ -33,13 +33,12 @@ function blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)
     return p_nullcline
 end 
 
-raw"""
+"""
     bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams) 
-
 
 ```math
 \\begin{equation}
-\\dot{b} = 0 \\Leftrightarrow n_b(b) = p = \\frac{k_p \\sqrt{b(bcr_0)k_b^2 + (b^2 + k_b^2)(b \\lambda_b - \\mu_b) - k_b^2 \\sigma_b}}{\\sqrt{-b (bcr_0) k_b^2 - (b^2 + k_b^2)(b \\lambda_b - \\mu_b)}}
+\\dot{x} = y
 \\end{equation}
 ```
 
@@ -58,14 +57,17 @@ interpretable, only +b_nullcline is returned.
 """
 function bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams)
     # parameters 
-    @unpack kp, kb, σb, μb, λb, bcr0 = params
+    @unpack kp, kb, σb, μb, λb, bcr_constant = params
 
     b = bcl6_level
- 
-    b_nullcline_numerator = kp*sqrt(b*bcr0*kb^2 + (b^2 + kb^2)*(b*λb - μb) 
-        - kb^2*σb)
-    b_nullcline_denominator = sqrt(-b*bcr0*kb^2 - (b^2 + kb^2)*(b*λb - μb))
-    b_nullcline = b_nullcline_numerator/b_nullcline_denominator    
 
+    #reciprocal_kb_scaled = 1/dissociation_scaler(kb, b) 
+    #denominator_term = ((λb + bcr_constant)*b - μb)*(1/σb)*reciprocal_kb_scaled
+    #@show b kp^2 / denominator_term
+    #b_nullcline = sqrt((kp^2/denominator_term) - kp^2)
+    
+    b_nullcline = sqrt((kp^2*σb*kb^2)/
+        ((b*λb + b*bcr_constant - μb)*(kb^2 + b^2)) - kp^2)
+    
     return b_nullcline
 end 
