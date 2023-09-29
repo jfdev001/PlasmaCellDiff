@@ -4,6 +4,8 @@ library(knitr)
 library(phaseR)
 library(deSolve)
 library(graphics)
+# https://cran.r-project.org/web/packages/captioner/index.html
+# https://www.dataquest.io/blog/install-package-r/ 
 library(captioner)
 library(latex2exp)
 
