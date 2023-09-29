@@ -21,7 +21,7 @@ Things to include in order of priority
         * BCR signaling might be increased or decreased by modulating the
         magnitude of the gaussian peak
     * [] Bifurcation/hysteresis plots
-        * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $sigma_b$,
+        * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $\sigma_b$,
         degradation and transcription parameters, respectively. 
 * [] Figure 2
 * [] FIgure 3
