@@ -38,7 +38,6 @@ end
     bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams) 
 
 ```math
-TODO:
 \\begin{equation}
 \\dot{x} = 0 \\Leftrightarrow n_b(b) = \\sqrt{\\frac{k_p^2}{[(\\lambda_b + bcr_0 \\frac{k_b^2}{k_b^2 + b^2})b - \\mu_b]\\frac{k_b^2 + b^2}{\\sigma_b k_b^2}} - k_p^2}
 \\end{equation}
