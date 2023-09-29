@@ -34,3 +34,7 @@ Datseris G. and Parlitz U. Chapter 1 - 4 from Nonlinear Dynamics: A Concise
 Introduction Interlaced with Code (2022). 
 [github](https://github.com/JuliaDynamics/NonlinearDynamicsTextbook/tree/master). 
 note: null clines, bifurcation analysis, stability analysis, lyapunov.
+
+Numerical bifurcation diagrams and bistable systems. Lecture notes from
+computational biology at École normale supérieure de Paris. 
+url: http://www.normalesup.org/~doulcier/teaching/modeling/ (2018)
