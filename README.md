@@ -17,10 +17,12 @@ Things to include in order of priority
 ## Progress Meeting 3 (2023-10-06)
 
 * [] Figure S1
-    * Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
-    * BCR signaling might be increased or decreased by modulating the
-    magnitude of the gaussian peak
-    * 
+    * [X] Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
+        * BCR signaling might be increased or decreased by modulating the
+        magnitude of the gaussian peak
+    * [] Bifurcation/hysteresis plots
+        * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $sigma_b$,
+        degradation and transcription parameters, respectively. 
 * [] Figure 2
 * [] FIgure 3
 
