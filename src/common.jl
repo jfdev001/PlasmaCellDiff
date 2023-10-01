@@ -1,8 +1,15 @@
 using Distributions: Normal, pdf
+import ConstructionBase: setproperties, setproperties_object
+using ConstructionBase
 using UnPack
 
-abstract type AbstractGeneRegulationType end
+"""
+    AbstractGeneRegulationType
 
+Supertype of all concrete implementations used to determine which BCR/CD40
+regulation method is called via multiple dispatch.
+"""
+abstract type AbstractGeneRegulationType end
 struct Gaussian <: AbstractGeneRegulationType end
 struct Constant <: AbstractGeneRegulationType end
 
@@ -76,6 +83,28 @@ function Base.show(io::IO, z::GerminalCenterODEParams)
         println(io, "  $pname = $pvalue")
     end 
     println(")")
+end
+
+"""
+    setproperties_object(obj::GerminalCenterODEParams, patch)
+
+Return `GerminalCenterODEParams` constructed with new parameters as specified
+by `patch`. Compliant with interface needed for `BifurcationKit.continuation`.
+
+# References:
+[1] : [Get parameters of a parametric type](https://stackoverflow.com/questions/35759794/get-parameters-of-a-parametric-type)
+"""
+function setproperties_object(obj::GerminalCenterODEParams, patch)
+    ConstructionBase.check_properties_are_fields(obj)                                               
+    nt = getproperties(obj)                                                        
+    nt_new = merge(nt, patch)                                                      
+    ConstructionBase.check_patch_properties_exist(nt_new, nt, obj, patch)                           
+    bcr0_cd0_types = collect(typeof(obj).parameters)
+    return GerminalCenterODEParams{bcr0_cd0_types...}(; nt_new...)    
+end  
+
+function setproperties(obj::GerminalCenterODEParams, patch::NamedTuple)
+    setproperties_object(obj, patch)
 end 
 
 """
