@@ -56,6 +56,8 @@ TODO: check if both are required to be gaussian for this Jacobian to be correct.
 """
 function germinal_center_exit_pathway_jacobian(
     u, params::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
+
+    throw("bcr0 should be gaussian, not bcr itself")
     # parameters 
     @unpack μp, μb, μr = params 
     @unpack σp, σb, σr = params 

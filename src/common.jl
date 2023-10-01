@@ -57,18 +57,18 @@ compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
     cd0::Float64 = 0.015 # Range of CD40-induced transcription of IRF4 in [0, 1] 
     C0::Float64 = 10e-8  # Appears to be unused
 
-    # Gaussian BCR and CD40 regulation parameters
+    # Gaussian bcr0 and cd0 regulation parameters
     # determined experimentally in 
     # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
-    bcr_max_signal::Float64 = 0.1875
-    bcr_max_signal_centered_on_timestep::Float64 = 50
-    bcr_max_signal_timestep_std::Float64 = 1
+    bcr0_max_signal::Float64 = 1
+    bcr0_max_signal_centered_on_timestep::Float64 = 45
+    bcr0_max_signal_timestep_std::Float64 = 0.1
     # TODO:
     # bcr_gaussian = Normal(...) # save peak for actual function call
 
-    cd40_max_signal::Float64 = 0.0375
-    cd40_max_signal_centered_on_timestep::Float64 = 60
-    cd40_max_signal_timestep_std::Float64 = 1
+    cd0_max_signal::Float64 = 1
+    cd0_max_signal_centered_on_timestep::Float64 = 60
+    cd0_max_signal_timestep_std::Float64 = 0.1
     # cd40_gaussian = Normal(...)
 end
 
@@ -116,15 +116,22 @@ end
 
 function BCR(u, params::GerminalCenterODEParams{:gaussian, T}, t) where T 
     # gaussian regulation parameters 
-    @unpack bcr_max_signal = params
-    @unpack bcr_max_signal_centered_on_timestep = params
-    @unpack bcr_max_signal_timestep_std = params
+    @unpack bcr0_max_signal = params
+    @unpack bcr0_max_signal_centered_on_timestep = params
+    @unpack bcr0_max_signal_timestep_std = params
+    @unpack kb = params
 
-    return gaussian_regulatory_signal(;
-        peak = bcr_max_signal, 
-        μ = bcr_max_signal_centered_on_timestep,
-        σ = bcr_max_signal_timestep_std,
+    p, b, r = u
+
+    gaussian_bcr0 = gaussian_regulatory_signal(;
+        peak = bcr0_max_signal, 
+        μ = bcr0_max_signal_centered_on_timestep,
+        σ = bcr0_max_signal_timestep_std,
         t = t)
+
+    bcr = BCR(; bcr0 = gaussian_bcr0, kb, b)
+
+    return bcr
 end 
 
 function BCR(u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
@@ -149,15 +156,22 @@ function CD40(u, params::GerminalCenterODEParams{T, :constant}, t) where T
 end
 
 function CD40(u, params::GerminalCenterODEParams{T, :gaussian}, t) where T
-    @unpack cd40_max_signal = params
-    @unpack cd40_max_signal_centered_on_timestep = params
-    @unpack cd40_max_signal_timestep_std = params
- 
-    return gaussian_regulatory_signal(; 
-        peak = cd40_max_signal,
-        μ = cd40_max_signal_centered_on_timestep,
-        σ = cd40_max_signal_timestep_std,
+    @unpack cd0_max_signal = params
+    @unpack cd0_max_signal_centered_on_timestep = params
+    @unpack cd0_max_signal_timestep_std = params
+    @unpack kb = params
+    
+    p, b, r = u 
+
+    gaussian_cd0 = gaussian_regulatory_signal(; 
+        peak = cd0_max_signal,
+        μ = cd0_max_signal_centered_on_timestep,
+        σ = cd0_max_signal_timestep_std,
         t = t)
+
+    cd40 = CD40(; cd0 = gaussian_cd0, kb, b)
+
+    return cd40
 end 
 
 function CD40(u, params::GerminalCenterODEParams{T, :reciprocal}, t) where T

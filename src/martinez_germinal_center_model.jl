@@ -10,7 +10,8 @@ using DynamicalSystems: SVector, SMatrix, CoupledODEs
 using UnPack
 
 """
-    germinal_center_exit_pathway_rule(u, params::GerminalCenterODEParams, t)
+    germinal_center_exit_pathway_rule(
+        u, params::GerminalCenterODEParams, t = 0)
 
 Return rule for gene regulatory module controlling germinal center exit pathway
 with coupled BCR and CD40 regulatory signals.
@@ -28,7 +29,7 @@ with coupled BCR and CD40 regulatory signals.
 [1] : Equations S1 - S3 from Martinez2012
 """
 function germinal_center_exit_pathway_rule(
-    u, params::GerminalCenterODEParams, t)
+    u, params::GerminalCenterODEParams, t = 0)
     # parameters 
     @unpack μp, μb, μr = params
     @unpack σp, σb, σr = params
@@ -53,8 +54,13 @@ function germinal_center_exit_pathway_rule(
     bdot = μb + σb*kp_scaled*kb_scaled*kr_scaled - (λb + bcr)*b
     rdot = μr + σr*r_scaled + cd40 - λr*r
 
-    return SVector(pdot, bdot, rdot)
+    return [pdot, bdot, rdot]
 end
+
+function germinal_center_exit_pathway_rule_SVector(
+    u, params::GerminalCenterODEParams, t)
+    return SVector{3}(germinal_center_exit_pathway_rule(u, params, t))
+end 
 
 """
     germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
@@ -63,7 +69,7 @@ Return CoupledODEs model for gene regulatory module controlling germinal center
 exit pathway with coupled BCR and CD40 regulatory signals. 
 """
 function germinal_center_exit_pathway(u0, params::GerminalCenterODEParams) 
-    return CoupledODEs(germinal_center_exit_pathway_rule, u0, params)
+    return CoupledODEs(germinal_center_exit_pathway_rule_SVector, u0, params)
 end
 
 
