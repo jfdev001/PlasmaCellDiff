@@ -55,15 +55,23 @@ nullclines {phaseR} (in CRAN) or homerolled grind.R (university utrecht)
 
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
-function bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams)
+function bcl6_nullcline(
+    bcl6_level, params::GerminalCenterODEParams)
     # parameters 
     @unpack kp, kb, σb, μb, λb, bcr0 = params
 
+    # p = blimp1_level
     b = bcl6_level
   
     # hand solved using bcr0 
     denom = (b*(λb + bcr0*(kb^2/(kb^2 + b^2))) - μb)*(kb^2 + b^2)/(σb*kb^2)
     b_nullcline = nm.sqrt((kp^2/denom) - kp^2)
+    
+    # function of two vars inspired by F.G. Gonzalez
+    #kp_scaler = dissociation_scaler(kp, p)
+    #kb_scaler = dissociation_scaler(kb, b)
+    #bcr = BCR(; bcr0, kb, b)
+    #b_nullcline = (μb + σb*kp_scaler*kb_scaler) / (λb + bcr)
      
     return b_nullcline
 end 

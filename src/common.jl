@@ -82,7 +82,7 @@ function Base.show(io::IO, z::GerminalCenterODEParams)
         pvalue = propvalues[i]
         println(io, "  $pname = $pvalue")
     end 
-    println(")")
+    println(io, ")")
 end
 
 """
