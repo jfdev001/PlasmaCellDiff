@@ -121,7 +121,7 @@ function BCR(u, params::GerminalCenterODEParams{:gaussian, T}, t) where T
     @unpack bcr0_max_signal_timestep_std = params
     @unpack kb = params
 
-    p, b, r = u
+    b = u[2]
 
     gaussian_bcr0 = gaussian_regulatory_signal(;
         peak = bcr0_max_signal, 
@@ -136,7 +136,7 @@ end
 
 function BCR(u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
     @unpack bcr0, kb = params
-    p, b, r = u
+    b = u[2]
     return BCR(; bcr0, kb, b)
 end 
 
@@ -161,7 +161,7 @@ function CD40(u, params::GerminalCenterODEParams{T, :gaussian}, t) where T
     @unpack cd0_max_signal_timestep_std = params
     @unpack kb = params
     
-    p, b, r = u 
+    b = u[2]
 
     gaussian_cd0 = gaussian_regulatory_signal(; 
         peak = cd0_max_signal,
@@ -176,7 +176,7 @@ end
 
 function CD40(u, params::GerminalCenterODEParams{T, :reciprocal}, t) where T
     @unpack cd0, kb = params
-    p, b, r = u
+    b = u[2]
     return CD40(; cd0, kb, b)
 end 
 
