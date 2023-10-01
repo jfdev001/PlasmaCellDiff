@@ -4,7 +4,7 @@ using UnPack
 
 """
     germinal_center_exit_pathway_jacobian(
-        u, params::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
+        u, params::GerminalCenterODEParams{Constant, Constant}, t)
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ reciprocal BCR/CD40.
 
@@ -14,7 +14,7 @@ symbolic Jacobian.
 TODO: Check if both are requried to be reciprocal for this to be true.
 """
 function germinal_center_exit_pathway_jacobian(
-    u, params::GerminalCenterODEParams{:reciprocal, :reciprocal}, t)
+    u, params::GerminalCenterODEParams{Constant, Constant}, t)
     @unpack μp, μb, μr = params 
     @unpack σp, σb, σr = params
     @unpack kp, kb, kr = params 
@@ -45,7 +45,7 @@ end
 
 """
     germinal_center_exit_pathway_jacobian(
-        u, params::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
+        u, params::GerminalCenterODEParams{Gaussian, Gaussian}, t) 
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ gaussian BCR/CD40.
 
@@ -55,7 +55,7 @@ generated the symbolic Jacobian.
 TODO: check if both are required to be gaussian for this Jacobian to be correct.
 """
 function germinal_center_exit_pathway_jacobian(
-    u, params::GerminalCenterODEParams{:gaussian, :gaussian}, t) 
+    u, params::GerminalCenterODEParams{Gaussian, Gaussian}, t) 
 
     throw("bcr0 should be gaussian, not bcr itself")
     # parameters 

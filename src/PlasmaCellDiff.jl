@@ -2,6 +2,7 @@ module PlasmaCellDiff
 
 # parameters
 export GerminalCenterODEParams
+export Constant, Gaussian
 
 # models
 export germinal_center_exit_pathway, bcr_subnetwork

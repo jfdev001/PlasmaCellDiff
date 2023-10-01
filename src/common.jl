@@ -1,37 +1,36 @@
 using Distributions: Normal, pdf
 using UnPack
 
-const NORMAL_DISTRIBUTION_PEAK_Y_STD_5::Float64 = 0.08
-const NORMAL_DISTRIBUTION_PEAK_Y_STD_1::Float64 = 0.40
+abstract type AbstractGeneRegulationType end
+
+struct Gaussian <: AbstractGeneRegulationType end
+struct Constant <: AbstractGeneRegulationType end
 
 """
-    mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
+    struct GerminalCenterODEParams{
+        Bcr0Method <: AbstractGeneRegulationType, 
+        Cd0Method <: AbstractGeneRegulationType} 
 
 Parameters used for dynamical systems simulating germinal center regulation.
-`BCRMethod` and `CD40Method` are symbols in 
-`[:constant, :gaussian, :reciprocal]` that determine how CD40 and BCR
-are modelled. Note that `:reciprocal` uses equations S4 and S5 defined 
-explicitly in Martinez2012.
+`Bcr0Method` and `Cd0Method` denote whether the gene regulation signals
+propagated by BCR and CD40 will be modified by either a constant bcr0/cd0
+or a gaussian bcr0/cd0 (see [`AbstractGeneRegulationType`](@ref) for valid 
+types).
 
-TODO: This could be made more efficient by using design decision
-inspired by Chaitanya Kumar (and his suggestions about solvers used
-in DifferentialEquations.jl) by employing compile time dispatch as well as
-using a non mutable struct (as suggested by 
-https://stackoverflow.com/questions/77188675/overloading-methods-for-parametrized-struct
-```julia
-abstract type AbstractParamType end
+NOTE: Could make the gaussian distribution for bcr0 and cd0 fields of this
+struct; however, mixed parameter type might cause performance issues
+for dynamical systems... current strategy is to just instantiate 
+a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
 
-struct Exponential <: AbstractParamType end
-struct Gaussian <: AbstractParamType end
-struct Constant <: AbstractParamType end
-struct Reciprocal <: AbstractParamType end
+# References
+[1] : Table S1 from Martinez2012
 
-@kwdef mutable struct Params{P1<:AbstractParamType, P2<:AbstractParamType}
-
-compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
-```
+[2]: [Stack Overflow: On abstract parameter type design](https://stackoverflow.com/questions/77188675/overloading-methods-for-parametrized-struct)
 """
-@kwdef mutable struct GerminalCenterODEParams{BCRMethod, CD40Method}
+@kwdef struct GerminalCenterODEParams{
+    Bcr0Method <: AbstractGeneRegulationType, 
+    Cd0Method <: AbstractGeneRegulationType} 
+    # parameters
     μp::Float64 = 10e-6 # Basal transcription rate
     μb::Float64 = 2.0 
     μr::Float64 = 0.1  
@@ -48,10 +47,6 @@ compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
     λb::Float64 = 1.0 
     λr::Float64 = 1.0
 
-    # BCR and CD40 gene regulation as constant in time
-    bcr_constant::Float64 = 15.0 # from figure S1
-    cd40_constant::Float64 = NaN
-
     # Reciprocal function BCR and CD40 regulation parameters
     bcr0::Float64 = 0.05 # Range of BCR-induced degradation of BCL6 in [0, 10]
     cd0::Float64 = 0.015 # Range of CD40-induced transcription of IRF4 in [0, 1] 
@@ -59,11 +54,10 @@ compute_bcr(;u, params::Params{Constant, <:AbstractParamType}, t) = 15
 
     # Gaussian bcr0 and cd0 regulation parameters
     # determined experimentally in 
-    # `notebooks/plot_martinez_germinal_center_gaussian_trajectory.ipynb`
     bcr0_max_signal::Float64 = 1
     bcr0_max_signal_centered_on_timestep::Float64 = 45
     bcr0_max_signal_timestep_std::Float64 = 0.1
-    # TODO:
+    # TODO: 
     # bcr_gaussian = Normal(...) # save peak for actual function call
 
     cd0_max_signal::Float64 = 1
@@ -95,7 +89,7 @@ dissociation_scaler(k, ui) = k^2 / (k^2 + ui^2)
     transcription_factor_scaler(k, ui)
 
 Scales protein level for transcription factor ui using dissociation constant
-k associated with uᵢ.
+k associated with ui.
 """
 transcription_factor_scaler(k, ui) = ui^2 / (k^2 + ui^2)
 
@@ -109,12 +103,10 @@ Return BCR gene regulatory signal.
 """
 BCR(; bcr0, kb, b) = bcr0*dissociation_scaler(kb, b)
 
-function BCR(u, params::GerminalCenterODEParams{:constant, T}, t) where T
-    @unpack bcr_constant = params
-    return bcr_constant 
-end 
-
-function BCR(u, params::GerminalCenterODEParams{:gaussian, T}, t) where T 
+function BCR(
+    u, 
+    params::GerminalCenterODEParams{Gaussian, <:AbstractGeneRegulationType}, 
+    t)  
     # gaussian regulation parameters 
     @unpack bcr0_max_signal = params
     @unpack bcr0_max_signal_centered_on_timestep = params
@@ -134,7 +126,10 @@ function BCR(u, params::GerminalCenterODEParams{:gaussian, T}, t) where T
     return bcr
 end 
 
-function BCR(u, params::GerminalCenterODEParams{:reciprocal, T}, t) where T
+function BCR(
+    u, 
+    params::GerminalCenterODEParams{Constant, <:AbstractGeneRegulationType}, 
+    t) 
     @unpack bcr0, kb = params
     b = u[2]
     return BCR(; bcr0, kb, b)
@@ -150,12 +145,10 @@ Return CD40 gene regulatory signal.
 """
 CD40(; cd0, kb, b) = cd0*dissociation_scaler(kb, b)
 
-function CD40(u, params::GerminalCenterODEParams{T, :constant}, t) where T
-    @unpack cd40_constant = params
-    return cd40_constant
-end
-
-function CD40(u, params::GerminalCenterODEParams{T, :gaussian}, t) where T
+function CD40(
+    u, 
+    params::GerminalCenterODEParams{<:AbstractGeneRegulationType, Gaussian}, 
+    t)
     @unpack cd0_max_signal = params
     @unpack cd0_max_signal_centered_on_timestep = params
     @unpack cd0_max_signal_timestep_std = params
@@ -174,7 +167,10 @@ function CD40(u, params::GerminalCenterODEParams{T, :gaussian}, t) where T
     return cd40
 end 
 
-function CD40(u, params::GerminalCenterODEParams{T, :reciprocal}, t) where T
+function CD40(
+    u, 
+    params::GerminalCenterODEParams{<:AbstractGeneRegulationType, Constant}, 
+    t)
     @unpack cd0, kb = params
     b = u[2]
     return CD40(; cd0, kb, b)
@@ -189,9 +185,7 @@ distribution with the desired parameters `μ` and `σ` at point `t` scaled by
 
 NOTE: Repeatedly instantiating `Normal` is likely not efficient, but the 
 alternative is passing it as a parameter to the function defining the ODE
-system (`germinal_center_gaussian_exit_pathway`) which is known to be
-inefficient. Perhaps `Benchmark`ing this would be interesting, though is
-clearly not necessary for the scope of this project.
+system.
 """
 gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
 
