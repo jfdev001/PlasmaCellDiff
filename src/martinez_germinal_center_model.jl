@@ -81,7 +81,7 @@ BCR signaling rule decoupled from CD40 signaling and with negligible IRF4 level.
 # References
 [1] : Equations S6 and S7 from Martinez2012
 """
-function bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
+function bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
     # parameters 
     @unpack μp, μb = params
     @unpack σp, σb = params
@@ -102,9 +102,13 @@ function bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
     pdot = μp + σp*kb_scaled - λp*p
     bdot = μb + σb*kp_scaled*kb_scaled - (λb + bcr)*b
 
-    return SVector(pdot, bdot)
+    return [pdot, bdot]
+end 
+
+function bcr_subnetwork_rule_SVector(u, params::GerminalCenterODEParams, t)
+    return SVector{2}(bcr_subnetwork_rule(u, params, t))
 end 
 
 function bcr_subnetwork(u0, params::GerminalCenterODEParams)
-    return CoupledODEs(bcr_subnetwork_rule, u0, params)
+    return CoupledODEs(bcr_subnetwork_rule_SVector, u0, params)
 end 
