@@ -217,17 +217,3 @@ alternative is passing it as a parameter to the function defining the ODE
 system.
 """
 gaussian_regulatory_signal(; peak, μ, σ, t) = peak*pdf(Normal(μ, σ), t)
-
-"""
-    irf4_bistability(; μr, cd40, σr, λr, k) 
-
-Return bistability constraint for IRF4 written as a function of relevant IRF4
-kinetic parameters.
-
-NOTE: Maybe altering σr is what leads to the Figures 2 (β ∈ {1.5, 1.8, 2})
-
-# References
-[1] : Equation S9 (i.e., β = ...) from Martinez2012
-"""
-irf4_bistability(; μr, cd40, σr, λr, kr) = (μr + cd40 + σr)/(λr*kr)
-

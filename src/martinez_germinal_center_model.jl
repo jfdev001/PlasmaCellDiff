@@ -123,14 +123,14 @@ BLIMP1 levels.
 [1] : Equation S8 from Martinez2012
 """
 function cd40_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
-    @unpack μr, cd0, σr, λr = params
-    r = u
+    @unpack μr, cd0, σr, λr, kr = params
+    r = u[1]
     
     # assume CD40 response is linear with range of CD40 induced transcription
     cd40 = cd0
 
-    kr_scaled = dissociation_scaler(kr, r)
-    rdot = μr + cd40 + σr*kr_scaler - λr*r
+    r_scaled = transcription_factor_scaler(kr, r)
+    rdot = μr + cd40 + σr*r_scaled - λr*r
 
     return [rdot]
 end 
