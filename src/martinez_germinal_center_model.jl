@@ -112,3 +112,33 @@ end
 function bcr_subnetwork(u0, params::GerminalCenterODEParams)
     return CoupledODEs(bcr_subnetwork_rule_SVector, u0, params)
 end 
+
+"""
+     cd40_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
+
+CD40 signaling decoupled from BCR signaling and with negligible BCL6 and
+BLIMP1 levels.
+
+# References
+[1] : Equation S8 from Martinez2012
+"""
+function cd40_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
+    @unpack μr, cd0, σr, λr = params
+    r = u
+    
+    # assume CD40 response is linear with range of CD40 induced transcription
+    cd40 = cd0
+
+    kr_scaled = dissociation_scaler(kr, r)
+    rdot = μr + cd40 + σr*kr_scaler - λr*r
+
+    return [rdot]
+end 
+
+function cd40_subnetwork_rule_SVector(u, params::GerminalCenterODEParams, t)
+    return SVector{1}(cd40_subnetwork_rule(u, params, t))
+end 
+
+function cd40_subnetwork(u0, params::GerminalCenterODEParams)
+    return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params)
+end 
