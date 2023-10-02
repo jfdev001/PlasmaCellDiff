@@ -1,4 +1,5 @@
 using UnPack
+using NaNMath: pow
 
 """
      check_irf4_bistability_conditions(; μr, cd40, σr, λr, kr)
@@ -10,12 +11,15 @@ Prints whether the current IRF4 parameters meet the conditions for bistability.
 """
 function check_irf4_bistability_conditions(; μr, cd40, σr, λr, kr)
     β = (μr + cd40 + σr)/(λr*kr)
-    
+   
+    @show β 
     if β > sqrt(3)
-        println("β > √3" * " => $β > $√3")
+        println("β > √3" * " => $β > $(sqrt(3))")
     end 
     
-    β_polynomial = β^3 - (β^2 - 3)^(3/2) + 9*β 
+    β_polynomial = β^3 - pow((β^2 - 3), (3/2)) + 9*β
+    @show β_polynomial    
+ 
     β_polynomial_str = "β^3 - (β^2 - 3)^(3/2) + 9*β"
     scaled_transcription_rate_threshold = ((27*σr)/(2*λr*kr))
     scaled_transcription_rate_threshold_str = "((27*σr)/(2*λr*kr))" 

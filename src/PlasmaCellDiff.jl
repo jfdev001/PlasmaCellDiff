@@ -17,7 +17,7 @@ export BCR, CD40
 export blimp1_nullcline, bcl6_nullcline
 
 # IRF4 bistability functions for figure 2
-check_irf4_bistability_conditions
+export check_irf4_bistability_conditions
 
 # misc 
 export NORMAL_DISTRIBUTION_PEAK_Y_STD_5, NORMAL_DISTRIBUTION_PEAK_Y_STD_1
