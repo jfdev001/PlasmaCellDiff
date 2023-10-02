@@ -45,7 +45,7 @@ function plot_fig2(
 
     # iterate through parameters and plot bifurcationd diagrams
     cnter = 1
-    for cd0 in cd0s,  λr in λrs, kr in krs, σr in σrs, μr in μrs,
+    for cd0 in cd0s,  λr in λrs, kr in krs, σr in σrs, μr in μrs
         params = GerminalCenterODEParams{Constant, Constant}(;
             cd0,
             μr,
@@ -79,6 +79,9 @@ function plot_fig2(
 
         # set a flag that checks whether these parameters have already been
         # explored
+        # TODO: Could only try and plot those that were not already done
+        # though checking for this is probably slower than just plotting
+        # in the first place...
         already_plotted = false
 
         # continuation of equilibria
