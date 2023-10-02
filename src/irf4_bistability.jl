@@ -10,7 +10,7 @@ Prints whether the current IRF4 parameters meet the conditions for bistability.
 [1] : Equations S9 - S11 from Martinez2012
 """
 function check_irf4_bistability_conditions(; μr, cd40, σr, λr, kr)
-    β = (μr + cd40 + σr)/(λr*kr)
+    β = compute_irf4_bistability_β(; μr, cd40, σr, λr, kr)
    
     @show β 
     if β > sqrt(3)
@@ -43,3 +43,6 @@ function check_irf4_bistability_conditions(params)
     @unpack μr, cd0, σr, λr, kr = params
     check_irf4_bistability_conditions(; μr, cd40 = cd0, σr, λr, kr)
 end 
+
+compute_irf4_bistability_β(; μr, cd40, σr, λr, kr) = (μr + cd40 + σr)/(λr*kr)
+
