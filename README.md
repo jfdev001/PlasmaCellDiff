@@ -16,15 +16,22 @@ Things to include in order of priority
 
 ## Progress Meeting 3 (2023-10-06)
 
-* [] Figure S1
-    * [X] Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
-        * BCR signaling might be increased or decreased by modulating the
-        magnitude of the gaussian peak
-    * [] Bifurcation/hysteresis plots
-        * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $\sigma_b$,
-        degradation and transcription parameters, respectively. 
-* [] Figure 2
-* [] FIgure 3
+* Formally Assigned:
+    * [X] Figure S1
+        * [X] Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
+            * BCR signaling might be increased or decreased by modulating the
+            magnitude of the gaussian peak
+        * [X] Bifurcation/hysteresis plots
+            * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $\sigma_b$,
+            degradation and transcription parameters, respectively. 
+    * [] Figure 2
+        * Email discussion suggests impossible
+        * [] Show pitchfork '>' and saddle point bifurcation 'S' anyways
+    * [] FIgure 3
+        * Not attempted
+* Selected in order of priority
+    * [] Parameter fitting (by Dr. van Kampen)
+    * [] Bifurcation figure S2 (in principle easier than the others)
 
 # References
 
