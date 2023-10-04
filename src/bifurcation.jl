@@ -6,8 +6,10 @@ using DynamicalSystems: trajectory
         bifurcation_param::Symbol, p_min, p_max, length_param_space,
         total_time, transient_time) 
 
-NOTE: just remove this... isn't functionally different from
-ChaosTools.orbitdiagram
+TODO: This should use OrdinaryDiffEq and solve and specify the steps
+at which one wishes to save their solution... this is relevant
+for periodically forced systems like SEIR (see 
+`notebooks/jl_example_orbit_diagram_of_periodically_forced_system.ipynb`).
 
 Compute bifurcations of the dynamical system `ds` by varying the 
 `bifurcation_param` from `p_min` to `p_max` with a total parameter space 
@@ -30,6 +32,8 @@ function bifurcation(
     ds::Function, u0, params,
     bifurcation_param::Symbol, p_min, p_max, length_param_space,
     total_time, transient_time) 
+
+    throw("notimplemented")
 
     # vectors to store repeated param for plotting as well as the steady states
     bifurcation_plot_params = []
