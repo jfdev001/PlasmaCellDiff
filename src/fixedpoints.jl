@@ -2,7 +2,7 @@
 # functions here that override the existing root finding helper functions
 # so that a non-zero timestep invokes gaussian signaling of BCR/CD40
 using PlasmaCellDiff
-import ChaosTools: to_root_f, to_root_J
+import ChaosTools: to_root_f, to_root_J, dynamic_rule
 
 function to_root_f(
     ds::CoupledODEs, p::GerminalCenterODEParams{Gaussian, Gaussian}, ::Nothing)
