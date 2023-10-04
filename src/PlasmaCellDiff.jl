@@ -30,5 +30,6 @@ include("nullclines.jl")
 include("jacobian.jl")
 include("irf4_bistability.jl")
 include("bifurcation.jl")
+include("fixedpoints.jl")
 
 end # module PlasmaCellDiff
