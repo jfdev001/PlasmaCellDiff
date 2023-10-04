@@ -46,13 +46,14 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
     σb::Float64 = 100.0 
     σr::Float64 = 2.6
 
-    kp::Float64 = 1.0 
-    kb::Float64 = 1.0 
-    kr::Float64 = 1.0 
-
     λp::Float64 = 1.0   # Degradation rate 
     λb::Float64 = 1.0 
     λr::Float64 = 1.0
+
+    kp::Float64 = 1.0   # dissociation constants
+    kb::Float64 = 1.0 
+    kr::Float64 = 1.0 
+
 
     # Reciprocal function BCR and CD40 regulation parameters
     bcr0::Float64 = 0.05 # Range of BCR-induced degradation of BCL6 in [0, 10]
@@ -105,6 +106,12 @@ end
 
 function setproperties(obj::GerminalCenterODEParams, patch::NamedTuple)
     setproperties_object(obj, patch)
+end
+
+function Base.getindex(A::GerminalCenterODEParams, inds...) 
+    prop_names = propertynames(A)
+    prop_values = [getproperty(A, prop_name) for prop_name in prop_names]
+    return prop_values[inds...]
 end 
 
 """
