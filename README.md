@@ -33,6 +33,18 @@ Things to include in order of priority
     * [] Parameter fitting (by Dr. van Kampen)
     * [] Bifurcation figure S2 (in principle easier than the others)
 
+## On Fixed Point Analysis for Figure 3 and Possibly Figure S5
+
+$$
+\begin{aligned}
+\frac{dp}{dt} &= \mu_p + \sigma_p \frac{k_b^2}{k_b^2 + b^2} + \sigma_p \frac{r^2}{k_r^2 + r^2} - \lambda_p p \\
+\frac{db}{dt} &= \mu_b + \sigma_b \frac{k_p^2}{k_p^2 + p^2}\frac{k_b^2}{k_b^2 + b^2}\frac{k_r^2}{k_r^2 + r^2} - (\lambda_b + BCR)b \\
+\frac{dr}{dt} &= \mu_r + \sigma_r \frac{r^2}{k_r^2 + r^2} + CD40 - \lambda_r r \\
+BCR &= \boxed{\text{BCR}_{\text{max}}\frac{1}{\sigma_{\text{BCR}}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_\text{BCR}}{\sigma_{\text{BCR}}})^2]}*\frac{k_b^2}{k_b^2 + b^2} \\
+CD40 &= \boxed{\text{CD40}_{\text{max}}\frac{1}{\sigma_{\text{CD40}}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_\text{CD40}}{\sigma_{\text{CD40}}})^2]}*\frac{k_b^2}{k_b^2 + b^2}
+\end{aligned}
+$$
+
 # References
 
 [Good Example of  Scientific Project in Julia: HighDimensionalComplexityEntropy](https://github.com/ikottlarz/HighDimensionalComplexityEntropy)
