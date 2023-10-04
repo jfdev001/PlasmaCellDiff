@@ -133,12 +133,34 @@ function cd40_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
     rdot = μr + cd40 + σr*r_scaled - λr*r
 
     return [rdot]
-end 
+end
 
-function cd40_subnetwork_rule_SVector(u, params::GerminalCenterODEParams, t)
+"""
+    cd40_subnetwork_rule(u, params, t = 0)
+
+Any type of params can be used here. Used with `ChaosTools.orbitdiagram`.
+"""
+function cd40_subnetwork_rule(u, params, t = 0)
+    μr, cd0, σr, λr, kr = params
+    r = u[1]
+    
+    # assume CD40 response is linear with range of CD40 induced transcription
+    cd40 = cd0
+
+    r_scaled = transcription_factor_scaler(kr, r)
+    rdot = μr + cd40 + σr*r_scaled - λr*r
+
+    return [rdot]
+end  
+
+function cd40_subnetwork_rule_SVector(u, params, t)
     return SVector{1}(cd40_subnetwork_rule(u, params, t))
 end 
 
 function cd40_subnetwork(u0, params::GerminalCenterODEParams)
     return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params)
+end
+
+function cd40_subnetwork(u0, params) 
+    return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params) 
 end 
