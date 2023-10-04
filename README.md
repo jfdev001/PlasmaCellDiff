@@ -48,7 +48,7 @@ $$
 $$
 
 $$
-BCR = \boxed{\text{BCR}_{\text{max}}\frac{1}{\sigma_{\text{BCR}}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_\text{BCR}}{\sigma_{\text{BCR}}})^2]}*\frac{k_b^2}{k_b^2 + b^2}
+BCR = \text{BCR}_{\text{max}}\frac{1}{\sigma_{\text{BCR}}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_\text{BCR}}{\sigma_{\text{BCR}}})^2]*\frac{k_b^2}{k_b^2 + b^2}
 $$
 
 $$
