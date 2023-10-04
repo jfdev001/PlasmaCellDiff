@@ -72,6 +72,7 @@ function germinal_center_exit_pathway_jacobian(
     cd0μ = cd0_max_signal_centered_on_timestep 
     cd0σ = cd0_max_signal_timestep_std
 
+    # state variables
     p, b, r = u
 
     # pdot/dui

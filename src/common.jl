@@ -61,19 +61,17 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
     C0::Float64 = 10e-8  # Appears to be unused
 
     # Gaussian bcr0 and cd0 regulation parameters
-    # determined experimentally in 
-    bcr0_t::Float64 = NaN        # eval gaussian at t for computing fixedpoints 
     bcr0_max_signal::Float64 = 1
     bcr0_max_signal_centered_on_timestep::Float64 = 45
     bcr0_max_signal_timestep_std::Float64 = 0.1
-    # TODO: 
-    # bcr_gaussian = Normal(...) # save peak for actual function call
 
-    cd0_t::Float64 = NaN        # eval gaussian at t for computing fixedpoints
     cd0_max_signal::Float64 = 1
     cd0_max_signal_centered_on_timestep::Float64 = 60
     cd0_max_signal_timestep_std::Float64 = 0.1
-    # cd40_gaussian = Normal(...)
+
+    # For fixed point calculation, the bcr0/cd0 regulatory mechanism
+    # require explicit knowledge about what timestep 
+    regulation_timestep_t::Float64 = NaN
 end
 
 function Base.show(io::IO, z::GerminalCenterODEParams)
