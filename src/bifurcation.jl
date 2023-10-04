@@ -6,6 +6,9 @@ using DynamicalSystems: trajectory
         bifurcation_param::Symbol, p_min, p_max, length_param_space,
         total_time, transient_time) 
 
+NOTE: just remove this... isn't functionally different from
+ChaosTools.orbitdiagram
+
 Compute bifurcations of the dynamical system `ds` by varying the 
 `bifurcation_param` from `p_min` to `p_max` with a total parameter space 
 `length_param_space` then evolve the system from the initial conditions `u0` 
