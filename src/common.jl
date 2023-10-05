@@ -3,6 +3,7 @@ import ConstructionBase: setproperties, setproperties_object
 using ConstructionBase
 using UnPack
 
+
 """
     AbstractGeneRegulationType
 
@@ -16,7 +17,7 @@ struct Constant <: AbstractGeneRegulationType end
 """
     struct GerminalCenterODEParams{
         Bcr0Method <: AbstractGeneRegulationType, 
-        Cd0Method <: AbstractGeneRegulationType} 
+        Cd0Method <: AbstractGeneRegulationType}
 
 Parameters used for dynamical systems simulating germinal center regulation.
 `Bcr0Method` and `Cd0Method` denote whether the gene regulation signals
@@ -36,7 +37,7 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
 """
 @kwdef struct GerminalCenterODEParams{
     Bcr0Method <: AbstractGeneRegulationType, 
-    Cd0Method <: AbstractGeneRegulationType} 
+    Cd0Method <: AbstractGeneRegulationType}
     # parameters
     μp::Float64 = 10e-6 # Basal transcription rate
     μb::Float64 = 2.0 
@@ -69,8 +70,8 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
     cd0_max_signal_centered_on_timestep::Float64 = 60
     cd0_max_signal_timestep_std::Float64 = 0.1
 
-    # For fixed point calculation, the bcr0/cd0 regulatory mechanism
-    # require explicit knowledge about what timestep 
+    # For fixed point/bifurcation calculation, the bcr0/cd0 regulatory 
+    # mechanism require explicit knowledge about the timestep
     regulation_timestep_t::Float64 = NaN
 end
 
@@ -149,6 +150,12 @@ function BCR(
     @unpack bcr0_max_signal_timestep_std = params
     @unpack kb = params
 
+    # for bifurcation only
+    regulation_timestep_t = params.regulation_timestep_t 
+    if !isnan(regulation_timestep_t)
+        t = regulation_timestep_t 
+    end
+
     b = u[2]
 
     gaussian_bcr0 = gaussian_regulatory_signal(;
@@ -189,6 +196,12 @@ function CD40(
     @unpack cd0_max_signal_centered_on_timestep = params
     @unpack cd0_max_signal_timestep_std = params
     @unpack kb = params
+
+    # for bifurcation only
+    regulation_timestep_t = params.regulation_timestep_t 
+    if !isnan(regulation_timestep_t)
+        t = regulation_timestep_t 
+    end
     
     b = u[2]
 
