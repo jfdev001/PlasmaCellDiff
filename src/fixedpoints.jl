@@ -28,7 +28,8 @@ Return fixed points, eigenvalues, and stability of dynamical system
 which has some time dependent forcing/regulation function.
 """
 function fixedpoints(
-        ds::DynamicalSystem, box, J, regulation_timestep_property::Symbol;
+        ds::DynamicalSystem, box, regulation_timestep_property::Symbol,
+        J = nothing;
         method = IntervalRootFinding.Krawczyk, tol = 1e-15, warn = true,
         order = nothing, # the keyword `order` will be the period in a future version...
     )
@@ -38,28 +39,30 @@ function fixedpoints(
     # Jacobian: copy code from `DynamicalSystemsBase`
     f = dynamic_rule(ds)
     p = current_parameters(ds)
+    regulation_timestep_t = getproperty(p, regulation_timestep_property)
+
+    # estimate jacobian is probably best in this case rather
+    # than explicit form...
     if isnothing(J)
-        Jf(u, p, t) = DynamicalSystemsBase.ForwardDiff.jacobian(x -> f(x, p, 0.0), u)
+        Jf(u, p, t) = DynamicalSystemsBase.ForwardDiff.jacobian(
+            x -> f(x, p, regulation_timestep_t), u)
     else
         Jf = J
     end
+
     # Find roots via IntervalRootFinding.jl
     fun = to_root_f(ds, p, order)
     jac = to_root_J(Jf, ds, p, order)
     r = IntervalRootFinding.roots(fun, jac, box, method, tol)
     D = dimension(ds)
     fp = ChaosTools.roots_to_dataset(r, D, warn)
-    @show r fp
 
     # Find eigenvalues and stability (taking regulation timestep into account)
     eigs = Vector{Vector{Complex{Float64}}}(undef, length(fp))
     Jm = zeros(dimension(ds), dimension(ds)) # `eigvals` doesn't work with `SMatrix`
-    regulation_timestep_t = getproperty(p, regulation_timestep_property)
     for (i, u) in enumerate(fp)
         # notice that we use the "pure" jacobian, no -u!
         Jm .= Jf(u, p, regulation_timestep_t)
-        @show u regulation_timestep_property
-        @show Jm
         eigs[i] = LinearAlgebra.eigvals(Array(Jm))
     end
     stable = Bool[ChaosTools.isstable(ds, e) for e in eigs]
