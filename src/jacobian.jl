@@ -7,9 +7,6 @@ using UnPack
         u, params::GerminalCenterODEParams{Constant, Constant}, t)
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ constant cd0/bcr0.
-
-See `notebooks/germinal_cell_jacobian.pdf` for the source that generated the
-symbolic Jacobian.
 """
 function germinal_center_exit_pathway_jacobian(
     u, params::GerminalCenterODEParams{Constant, Constant}, t)

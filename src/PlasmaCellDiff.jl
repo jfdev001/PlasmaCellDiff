@@ -20,6 +20,9 @@ export blimp1_nullcline, bcl6_nullcline
 export check_irf4_bistability_conditions
 export compute_irf4_bistability_β
 
+# fixed point analysis
+export fixedpoints
+
 # misc 
 export NORMAL_DISTRIBUTION_PEAK_Y_STD_5, NORMAL_DISTRIBUTION_PEAK_Y_STD_1
 export bifurcation
