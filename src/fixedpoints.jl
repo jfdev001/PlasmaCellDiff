@@ -19,10 +19,11 @@ function to_root_J(
 end
 
 """
-    fixedpoints(ds::DynamicalSystem, box, J = nothing;
-        regulation_timestep_property::Symbol,
-        method = IntervalRootFinding.Krawczyk, tol = 1e-15, warn = true,
-        order = nothing)
+    fixedpoints(
+            ds::DynamicalSystem, box, regulation_timestep_property::Symbol,
+            J = nothing;
+            method = IntervalRootFinding.Krawczyk, tol = 1e-15, warn = true,
+            order = nothing)
 
 Return fixed points, eigenvalues, and stability of dynamical system
 which has some time dependent forcing/regulation function.
@@ -31,8 +32,7 @@ function fixedpoints(
         ds::DynamicalSystem, box, regulation_timestep_property::Symbol,
         J = nothing;
         method = IntervalRootFinding.Krawczyk, tol = 1e-15, warn = true,
-        order = nothing, # the keyword `order` will be the period in a future version...
-    )
+        order = nothing)
     if isinplace(ds)
         error("`fixedpoints` currently works only for out-of-place dynamical systems.")
     end
