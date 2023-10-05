@@ -150,12 +150,6 @@ function BCR(
     @unpack bcr0_max_signal_timestep_std = params
     @unpack kb = params
 
-    # for bifurcation only
-    regulation_timestep_t = params.regulation_timestep_t 
-    if !isnan(regulation_timestep_t)
-        t = regulation_timestep_t 
-    end
-
     b = u[2]
 
     gaussian_bcr0 = gaussian_regulatory_signal(;
@@ -196,12 +190,6 @@ function CD40(
     @unpack cd0_max_signal_centered_on_timestep = params
     @unpack cd0_max_signal_timestep_std = params
     @unpack kb = params
-
-    # for bifurcation only
-    regulation_timestep_t = params.regulation_timestep_t 
-    if !isnan(regulation_timestep_t)
-        t = regulation_timestep_t 
-    end
     
     b = u[2]
 
