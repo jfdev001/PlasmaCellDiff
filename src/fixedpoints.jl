@@ -44,6 +44,8 @@ function fixedpoints(
     # estimate jacobian is probably best in this case rather
     # than explicit form...
     if isnothing(J)
+        # does the regulation timestep here in the fuunction even
+        # make a difference??
         Jf(u, p, t) = DynamicalSystemsBase.ForwardDiff.jacobian(
             x -> f(x, p, regulation_timestep_t), u)
     else
