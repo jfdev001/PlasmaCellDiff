@@ -41,25 +41,27 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
     # parameters
     μp::Float64 = 10e-6 # Basal transcription rate
     μb::Float64 = 2.0 
-    μr::Float64 = 0.1  
+    μr::Float64 = 0.1
+    μx::Float64 = NaN  
 
     σp::Float64 = 9.0   # Maximum induced transcription rate
     σb::Float64 = 100.0 
     σr::Float64 = 2.6
+    σx::Float64 = NaN
 
     λp::Float64 = 1.0   # Degradation rate 
     λb::Float64 = 1.0 
     λr::Float64 = 1.0
+    λx::Float64 = NaN
 
     kp::Float64 = 1.0   # dissociation constants
     kb::Float64 = 1.0 
     kr::Float64 = 1.0 
-
+    kx::Float64 = NaN
 
     # Reciprocal function BCR and CD40 regulation parameters
     bcr0::Float64 = 0.05 # Range of BCR-induced degradation of BCL6 in [0, 10]
     cd0::Float64 = 0.015 # Range of CD40-induced transcription of IRF4 in [0, 1] 
-    C0::Float64 = 10e-8  # Appears to be unused
 
     # Gaussian bcr0 and cd0 regulation parameters
     bcr0_max_signal::Float64 = 1
