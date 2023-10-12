@@ -23,7 +23,8 @@ with coupled BCR and CD40 regulatory signals.
     symbols are in `[:gaussian, :constant, :reciprocal]` and which determine
     the BCR/CD40 regulatory signaling mechanism.
 - `t`: Current time for numerical integration. No need to pass an argument here
-    since numerical integration is handled with builtin solvers.
+    since numerical integration is handled with builtin solvers. Default
+    argument of `t=0` to comply with `BifurcationKit` interface.
 
 # References
 [1] : Equations S1 - S3 from Martinez2012
@@ -74,9 +75,10 @@ end
 
 
 """
-    bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t)
+    bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
 
 BCR signaling rule decoupled from CD40 signaling and with negligible IRF4 level.
+Default `t = 0` to comply with `BifurcationKite interface.`
 
 # References
 [1] : Equations S6 and S7 from Martinez2012
@@ -163,4 +165,28 @@ end
 
 function cd40_subnetwork(u0, params) 
     return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params) 
+end 
+
+function extended_model1_rule(u, params::GerminalCenterODEParams, t = 0)
+    
+end 
+
+function extended_model1_rule_SVector(u, params, t)
+
+end 
+
+function extended_model2_rule(u, params::GerminalCenterODEParams, t = 0)
+
+end
+
+function extended_model2_rule_SVector(u, params, t)
+
+end 
+
+function extended_model3_rule(u, params::GerminalCenterODEParams, t = 0)
+
+end 
+
+function extended_model3_rule_SVector(u, params, t)
+
 end 
