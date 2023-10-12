@@ -16,22 +16,29 @@ Things to include in order of priority
 
 ## Progress Meeting 3 (2023-10-06)
 
-* Formally Assigned:
-    * [X] Figure S1
+* Tasks (dynamic):
+    * [X] Figure S1 (assigned)
         * [X] Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
             * BCR signaling might be increased or decreased by modulating the
             magnitude of the gaussian peak
         * [X] Bifurcation/hysteresis plots
             * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $\sigma_b$,
             degradation and transcription parameters, respectively. 
-    * [] Figure 2
-        * Email discussion suggests impossible
-        * [] Show pitchfork '>' and saddle point bifurcation 'S' anyways
-    * [] FIgure 3
-        * Not attempted
-* Selected in order of priority
-    * [] Parameter fitting (by Dr. van Kampen)
-    * [] Bifurcation figure S2 (in principle easier than the others)
+    * [X] Figure 2 (assigned)
+        * [X] Email discussion suggests impossible
+        * [X] Show pitchfork '>' and saddle point bifurcation 'S' anyways
+        * Generally could not reproduce
+    * [X] Figure 3 (assigned)
+        * BCR behavior replicated but CD40 not
+    * [] Analytical bifurcation of gaussian model and determination
+        of why the behavior was not replicated 
+    * [] Sensitivity analysis (should be pretty mindless, call global
+        sensitivity on dynamical system -- with constant bcr0/cd0
+        and could possibly see how this is with gaussian bcr0/cd0
+    * [] Figure S3
+        * This is just the gaussian model and the thick lines in the figure
+        are probably replicable by simply r^2/kr^2 + r^2 term from eq S1
+        (i.e., "elimination of IRF4-mediated BLIMP1 activation"
 
 ## On Fixed Point Analysis for Figure 3 and Possibly Figure S5
 
