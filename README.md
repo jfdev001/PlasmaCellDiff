@@ -28,6 +28,8 @@ Things to include in order of priority
         * [X] Email discussion suggests impossible
         * [X] Show pitchfork '>' and saddle point bifurcation 'S' anyways
         * Generally could not reproduce
+        * [] Could attempt naive fixed point computation for different
+        initial conditions and only the single moving parameter cd0 ...
     * [X] Figure 3 (assigned)
         * BCR behavior replicated but CD40 not
     * [] Analytical bifurcation of gaussian model and determination
