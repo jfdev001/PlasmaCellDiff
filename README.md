@@ -17,30 +17,37 @@ Things to include in order of priority
 ## Progress Meeting 3 (2023-10-06)
 
 * Tasks (dynamic):
-    * [X] Figure S1 (assigned)
+    * [X] Figure S1 (assigned, reproduced)
         * [X] Nullcline analysis (Ch. 8 Cell and Ch.2 JuliaNLD)
-            * BCR signaling might be increased or decreased by modulating the
-            magnitude of the gaussian peak
         * [X] Bifurcation/hysteresis plots
-            * BCR ?= bcr0, so vary this and then change $\lambda_b$ and $\sigma_b$,
-            degradation and transcription parameters, respectively. 
-    * [X] Figure 2 (assigned)
+    * [X] Figure 2 (assigned, partially reproduced)
         * [X] Email discussion suggests impossible
         * [X] Show pitchfork '>' and saddle point bifurcation 'S' anyways
-        * Generally could not reproduce
-        * [] Could attempt naive fixed point computation for different
         initial conditions and only the single moving parameter cd0 ...
-    * [X] Figure 3 (assigned)
+    * [X] Figure 3 (assigned, partially reproduced)
         * BCR behavior replicated but CD40 not
-    * [] Analytical bifurcation of gaussian model and determination
-        of why the behavior was not replicated 
-    * [] Sensitivity analysis (should be pretty mindless, call global
-        sensitivity on dynamical system -- with constant bcr0/cd0
-        and could possibly see how this is with gaussian bcr0/cd0
+        * [] Analytical bifurcation of gaussian model and determination
+            of why the behavior was not replicated... just take 
+            parameters at particular points in the gaussian peak, i.e.,
+            overlapping cd40 at particular timestep, means, and stds...
+            then compute zeros here to see if 3 more result... also double
+            check code to make sure all points are being plotted
     * [] Figure S3
         * This is just the gaussian model and the thick lines in the figure
         are probably replicable by simply r^2/kr^2 + r^2 term from eq S1
         (i.e., "elimination of IRF4-mediated BLIMP1 activation"
+    * [] Sensitivity analysis (should be pretty mindless, call global
+        sensitivity on dynamical system -- with constant bcr0/cd0
+        and could possibly see how this is with gaussian bcr0/cd0
+
+In terms of interpreting results, consider the following:
+
+* What is the physical interpretation of bifurcation?
+* Why does IRF4 parameters show bistable behavior but others don't
+* Does bistable behavior in single parameters justify bistable behavior
+of the system as a whole?? No the analytical bistability analysis suggests
+bistable behavior for IRF4 under certain conditions... but could not replicate
+this. 
 
 ## On Fixed Point Analysis for Figure 3 and Possibly Figure S5
 
