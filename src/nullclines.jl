@@ -6,7 +6,8 @@ using NaNMath; nm = NaNMath
 using UnPack
 
 """
-    blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)  
+    blimp1_nullcline(
+       bcl6_level, params::GerminalCenterODEParams{Constant, Constant})
 
 ```math
 \\begin{equation}
@@ -21,7 +22,8 @@ Return nullcline for BLIMP1 (`p`).
 
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
-function blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)
+function blimp1_nullcline(
+    bcl6_level, params::GerminalCenterODEParams{Constant, Constant})
     # parameters 
     @unpack μp, σp, λp, kb = params
 
@@ -34,8 +36,14 @@ function blimp1_nullcline(bcl6_level, params::GerminalCenterODEParams)
     return p_nullcline
 end 
 
+function blimp1_nullcline(
+    bcl6_level, params::GerminalCenterODEParams{Gaussian, Gaussian})
+    throw("notimplemented")
+end 
+
 """
-    bcl6_nullcline(bcl6_level, params::GerminalCenterODEParams) 
+    bcl6_nullcline(
+        bcl6_level, params::GerminalCenterODEParams{Constant, Constant})
 
 ```math
 \\begin{equation}
@@ -56,7 +64,7 @@ nullclines {phaseR} (in CRAN) or homerolled grind.R (university utrecht)
 [2] : https://www.normalesup.org/~doulcier/teaching/modeling/bistable_systems.html
 """
 function bcl6_nullcline(
-    bcl6_level, params::GerminalCenterODEParams)
+    bcl6_level, params::GerminalCenterODEParams{Constant, Constant})
     # parameters 
     @unpack kp, kb, σb, μb, λb, bcr0 = params
 
@@ -66,12 +74,12 @@ function bcl6_nullcline(
     # hand solved using bcr0 
     denom = (b*(λb + bcr0*(kb^2/(kb^2 + b^2))) - μb)*(kb^2 + b^2)/(σb*kb^2)
     b_nullcline = nm.sqrt((kp^2/denom) - kp^2)
-    
-    # function of two vars inspired by F.G. Gonzalez
-    #kp_scaler = dissociation_scaler(kp, p)
-    #kb_scaler = dissociation_scaler(kb, b)
-    #bcr = BCR(; bcr0, kb, b)
-    #b_nullcline = (μb + σb*kp_scaler*kb_scaler) / (λb + bcr)
      
     return b_nullcline
 end 
+
+function bcl6_nullcline(
+    bcl6_level, params::GerminalCenterODEParams{Gaussian, Gaussian})
+    throw("notimplemented")
+end 
+
