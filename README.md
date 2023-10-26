@@ -4,13 +4,13 @@ Codebase implementing the germinal center exit pathway kinetic model, emphasizin
 
 # Installation
 
-The only requirement is [Julia](https://julialang.org/), preferably version 1.9. Clone the repo and start a Julia REPL in the root directory  
+The only requirement is [Julia](https://julialang.org/), preferably version 1.9. Clone the repo and start a Julia REPL in the root directory
 
 ```shell
 julia --project=path/to/PlasmaCellDiff
 ```
 
-press `]` to enter Pkg mode. The REPL prompt should like 
+press `]` to enter Pkg mode. The REPL prompt should like
 
 ```shell
 (PlasmaCellDiff) pkg>
@@ -32,9 +32,9 @@ julia> notebook(dir="notebooks/")
 then you can open notebooks and run them accordingly to reproduce the figures
 in the `figures/` directory.
 
-# Germinal Cell Center Model
+# Germinal Center Model
 
-Note that $bcr_0$ and $cd_0$ could either be modelled with the Gaussian PDF 
+Note that $bcr_0$ and $cd_0$ could either be modelled with the Gaussian PDF
 defined below, or they could simply be constant parameters of the model.
 
 $$
