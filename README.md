@@ -2,7 +2,37 @@
 
 Codebase implementing the germinal center exit pathway kinetic model, emphasizing bifurcation analysis through simulation, as introduced by Martinez et. al. (2012). Part of the masters course Bioinformatics 1 during period 1, 2023 at the University of Amsterdam.
 
-## Gaussian Signaled Germinal Cell Center Model
+# Installation
+
+The only requirement is [Julia](https://julialang.org/), preferably version 1.9. Clone the repo and start a Julia REPL in the root directory  
+
+```shell
+julia --project=path/to/PlasmaCellDiff
+```
+
+press `]` to enter Pkg mode. The REPL prompt should like 
+
+```shell
+(PlasmaCellDiff) pkg>
+```
+
+Then instantiate the package to download the appropriate dependencies by
+
+```shell
+(PlasmaCellDiff) pkg> instantiate
+```
+
+Should you wish to re-run the notebooks that generate the figures, hit backspace to return to the regular REPL
+
+```shell
+julia> using IJulia
+julia> notebook(dir="notebooks/")
+```
+
+then you can open notebooks and run them accordingly to reproduce the figures
+in the `figures/` directory.
+
+# Gaussian Signaled Germinal Cell Center Model
 
 $$
 \frac{dp}{dt} = \mu_p + \sigma_p \frac{k_b^2}{k_b^2 + b^2} + \sigma_p \frac{r^2}{k_r^2 + r^2} - \lambda_p p
