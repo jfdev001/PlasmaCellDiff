@@ -23,16 +23,11 @@ export compute_irf4_bistability_β
 # fixed point analysis
 export fixedpoints
 
-# misc 
-export NORMAL_DISTRIBUTION_PEAK_Y_STD_5, NORMAL_DISTRIBUTION_PEAK_Y_STD_1
-export bifurcation
-
 include("common.jl")
 include("martinez_germinal_center_model.jl")
 include("nullclines.jl")
 include("jacobian.jl")
 include("irf4_bistability.jl")
-include("bifurcation.jl")
 include("fixedpoints.jl")
 
 end # module PlasmaCellDiff

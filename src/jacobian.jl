@@ -43,6 +43,8 @@ end
         u, params::GerminalCenterODEParams{Gaussian, Gaussian}, t) 
 
 Return Jacobian of `germinal_center_exit_pathway_rule` w/ gaussian BCR/CD40.
+
+NOTE: Possibly incorrect.
 """
 function germinal_center_exit_pathway_jacobian(
     u, params::GerminalCenterODEParams{Gaussian, Gaussian}, t) 

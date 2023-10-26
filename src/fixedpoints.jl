@@ -26,7 +26,9 @@ end
             order = nothing)
 
 Return fixed points, eigenvalues, and stability of dynamical system
-which has some time dependent forcing/regulation function.
+that has some time dependent forcing/regulation function for which the argument
+to such a function is in the parameters of `ds` and the symbol corresponding
+to the the timestep is `regulation_timestep_property`.
 """
 function fixedpoints(
         ds::DynamicalSystem, box, regulation_timestep_property::Symbol,

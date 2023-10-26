@@ -77,9 +77,3 @@ function bcl6_nullcline(
      
     return b_nullcline
 end 
-
-function bcl6_nullcline(
-    bcl6_level, params::GerminalCenterODEParams{Gaussian, Gaussian})
-    throw("notimplemented")
-end 
-

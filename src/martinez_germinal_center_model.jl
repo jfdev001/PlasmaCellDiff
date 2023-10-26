@@ -73,7 +73,6 @@ function germinal_center_exit_pathway(u0, params::GerminalCenterODEParams)
     return CoupledODEs(germinal_center_exit_pathway_rule_SVector, u0, params)
 end
 
-
 """
     bcr_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
 
@@ -137,24 +136,6 @@ function cd40_subnetwork_rule(u, params::GerminalCenterODEParams, t = 0)
     return [rdot]
 end
 
-"""
-    cd40_subnetwork_rule(u, params, t = 0)
-
-Any type of params can be used here. Used with `ChaosTools.orbitdiagram`.
-"""
-function cd40_subnetwork_rule(u, params, t = 0)
-    μr, cd0, σr, λr, kr = params
-    r = u[1]
-    
-    # assume CD40 response is linear with range of CD40 induced transcription
-    cd40 = cd0
-
-    r_scaled = transcription_factor_scaler(kr, r)
-    rdot = μr + cd40 + σr*r_scaled - λr*r
-
-    return [rdot]
-end  
-
 function cd40_subnetwork_rule_SVector(u, params, t)
     return SVector{1}(cd40_subnetwork_rule(u, params, t))
 end 
@@ -162,31 +143,3 @@ end
 function cd40_subnetwork(u0, params::GerminalCenterODEParams)
     return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params)
 end
-
-function cd40_subnetwork(u0, params) 
-    return CoupledODEs(cd40_subnetwork_rule_SVector, u0, params) 
-end 
-
-function extended_model1_rule(u, params::GerminalCenterODEParams, t = 0)
-    
-end 
-
-function extended_model1_rule_SVector(u, params, t)
-
-end 
-
-function extended_model2_rule(u, params::GerminalCenterODEParams, t = 0)
-
-end
-
-function extended_model2_rule_SVector(u, params, t)
-
-end 
-
-function extended_model3_rule(u, params::GerminalCenterODEParams, t = 0)
-
-end 
-
-function extended_model3_rule_SVector(u, params, t)
-
-end 
