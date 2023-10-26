@@ -32,26 +32,21 @@ julia> notebook(dir="notebooks/")
 then you can open notebooks and run them accordingly to reproduce the figures
 in the `figures/` directory.
 
-# Gaussian Signaled Germinal Cell Center Model
+# Germinal Cell Center Model
+
+Note that $bcr_0$ and $cd_0$ could either be modelled with the Gaussian PDF 
+defined below, or they could simply be constant parameters of the model.
 
 $$
-\frac{dp}{dt} = \mu_p + \sigma_p \frac{k_b^2}{k_b^2 + b^2} + \sigma_p \frac{r^2}{k_r^2 + r^2} - \lambda_p p
-$$
-
-$$
-\frac{db}{dt} = \mu_b + \sigma_b \frac{k_p^2}{k_p^2 + p^2}\frac{k_b^2}{k_b^2 + b^2}\frac{k_r^2}{k_r^2 + r^2} - (\lambda_b + BCR)b
-$$
-
-$$
-\frac{dr}{dt} = \mu_r + \sigma_r \frac{r^2}{k_r^2 + r^2} + CD40 - \lambda_r r
-$$
-
-$$
-BCR = BCR_{max} \frac{1}{\sigma_{BCR}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_{BCR}}{\sigma_{BCR}})^2]\frac{k_b^2}{k_b^2 + b^2}
-$$
-
-$$
-CD40 = CD40_{max}\frac{1}{\sigma_{CD40}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_{CD40}}{\sigma_{CD40}})^2]\frac{k_b^2}{k_b^2 + b^2}
+\begin{aligned}
+\frac{dp}{dt} &= \mu_p + \sigma_p \frac{k_b^2}{k_b^2 + b^2} + \sigma_p \frac{r^2}{k_r^2 + r^2} - \lambda_p p \\\\ % BLIMP1
+\frac{db}{dt} &= \mu_b + \sigma_b \frac{k_p^2}{k_p^2 + p^2}\frac{k_b^2}{k_b^2 + b^2}\frac{k_r^2}{k_r^2 + r^2} - (\lambda_b + BCR)b \\\\ % BCL6
+\frac{dr}{dt} &= \mu_r + \sigma_r \frac{r^2}{k_r^2 + r^2} + CD40 - \lambda_r r\\\\ % IRF4
+BCR &= bcr_0 \frac{k_b^2}{k_b^2 + b^2} \\\\ % BCR
+CD40 &= cd_0 \frac{k_b^2}{k_b^2 + b^2} \\\\ % CD40
+bcr_0 &= BCR_{max} \frac{1}{\sigma_{BCR}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_{BCR}}{\sigma_{BCR}})^2] \\\\ % Gaussian bcr0
+cd_0 &= CD40_{max}\frac{1}{\sigma_{CD40}\sqrt{2\pi}}\exp[-\frac{1}{2}(\frac{t - \mu_{CD40}}{\sigma_{CD40}})^2] % Gaussian cd0
+\end{aligned}
 $$
 
 # References
