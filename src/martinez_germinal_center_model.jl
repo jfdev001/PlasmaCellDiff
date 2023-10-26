@@ -19,9 +19,8 @@ with coupled BCR and CD40 regulatory signals.
 # Arguments 
 - `u`: State vector of dynamical system. The elements of this vector represent
     protein levels of `p` (BLIMP1), `b` (BCL6), and `r` (IRF4).
-- `params::GerminalCenterODEParams`: Typed mutable struct whose parametrized
-    symbols are in `[:gaussian, :constant, :reciprocal]` and which determine
-    the BCR/CD40 regulatory signaling mechanism.
+- `params::GerminalCenterODEParams`: Parametrized struct that determines 
+    model parameters as well as whether bcr0/cd0 are constant or gaussian.
 - `t`: Current time for numerical integration. No need to pass an argument here
     since numerical integration is handled with builtin solvers. Default
     argument of `t=0` to comply with `BifurcationKit` interface.
