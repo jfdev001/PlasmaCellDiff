@@ -36,6 +36,7 @@ function germinal_center_exit_pathway_rule(
     @unpack σp, σb, σr = params
     @unpack kp, kb, kr = params
     @unpack λp, λb, λr = params
+    @unpack irf4_mediated_blimp1_activation = params
 
     # transcription factor state variables 
     p, b, r = u
@@ -51,7 +52,9 @@ function germinal_center_exit_pathway_rule(
     cd40 = CD40(u, params, t)
 
     # system describing evolution of transcription factors in germinal center
-    pdot = μp + σp*kb_scaled + σp*r_scaled - λp*p
+    pdot = μp + σp*kb_scaled + 
+        (σp*r_scaled)*irf4_mediated_blimp1_activation - 
+        λp*p
     bdot = μb + σb*kp_scaled*kb_scaled*kr_scaled - (λb + bcr)*b
     rdot = μr + σr*r_scaled + cd40 - λr*r
 

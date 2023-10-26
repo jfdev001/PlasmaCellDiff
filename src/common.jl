@@ -75,6 +75,10 @@ a `Normal()` distribution each time see [`gaussian_regulatory_signal`](@ref)
     # For fixed point/bifurcation calculation, the bcr0/cd0 regulatory 
     # mechanism require explicit knowledge about the timestep
     regulation_timestep_t::Float64 = NaN
+
+    # false to eliminate IRF4-mediateded BLIMP1 activation as in fig s3,
+    # defaults to true and thus equation S1 is unchanged
+    irf4_mediated_blimp1_activation::Bool = true
 end
 
 function Base.show(io::IO, z::GerminalCenterODEParams)
