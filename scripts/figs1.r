@@ -1,4 +1,9 @@
-# Nullclines plotting
+## Plotting nullclines (fig s1 martinez2012) using phaseR
+# NOTE: This is basically just a copy paste of an old tutorial for which
+# one of the packages `captioner` may or may not be in CRAN anymore.
+# I didn't want to waste time fiddling with other plot libraries... so sorry
+# for the overhead of installing `captioner`
+
 # https://hluebbering.github.io/phase-planes/
 library(knitr)
 library(phaseR)

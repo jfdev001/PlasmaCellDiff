@@ -16,7 +16,10 @@ raw"""
         λrs=0.80:0.01:1.6, 
         krs=0.80:0.01:1.6)
 
-Plots the desired parameter space for figure 2 CD40 subnetwork. 
+Plots the desired parameter space for figure 2 CD40 subnetwork. The purpose
+of this is to brute force generate figure 2 martinez2012 plots to see if 
+I can reproduce it. This is a crude method, and was unsuccessful. I do not 
+recommend calling this function. 
 
 TODO: Should add a sampling parameter to downsample the parameter
 space.
