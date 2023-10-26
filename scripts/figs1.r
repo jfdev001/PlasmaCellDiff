@@ -1,23 +1,19 @@
 ## Plotting nullclines (fig s1 martinez2012) using phaseR
-# NOTE: This is basically just a copy paste of an old tutorial for which
-# one of the packages `captioner` may or may not be in CRAN anymore.
-# I didn't want to waste time fiddling with other plot libraries... so sorry
-# for the overhead of installing `captioner`
 
 # https://hluebbering.github.io/phase-planes/
 library(knitr)
 library(phaseR)
 library(deSolve)
 library(graphics)
-# https://cran.r-project.org/web/packages/captioner/index.html
-# https://www.dataquest.io/blog/install-package-r/ 
-library(captioner)
 library(latex2exp)
 
 # Figure options
 knitr::opts_chunk$set(
   echo = FALSE, out.width = 400, fig.align = "center", message = FALSE)
-fig_nums <- captioner(prefix = "Figure")
+
+# Open png device
+# https://stackoverflow.com/questions/7144118/how-to-save-a-plot-as-image-on-the-disk
+png("figures/figs1_nullclines_phaseR.png")
 
 # Martinez2012 nullclines 
 dissociation_scaler <- function(k, ui){
@@ -54,18 +50,17 @@ bcr_subnetwork <- function(t, y, parameters){
     list(du)
 }
 
-body_cap7 <- fig_nums(
-  name = "phase7", 
-  caption = "Phase Plane Analysis. Determine the steady-state solution by the 
-  nullclines' intersection for the Martinez2012 BCR Subnetwork.")
 bcr_subnetwork_flowField <-flowField(bcr_subnetwork,
-                                     xlim = c(0.0, 5.5),
-                                     ylim = c(0., 5.5),
-                                     add  = FALSE,
-                                     ylab = "BLIMP1",
-                                     xlab= "BCL6",
-                                     frac=1)
+     xlim = c(0.0, 5.5),
+     ylim = c(0., 5.5),
+     add  = FALSE,
+     main = "{phaseR} Computed Nullclines for BCR Subnetwork",
+     ylab = "BLIMP1",
+     xlab= "BCL6",
+     frac=1)
+
 grid()
+
 bcr_subnetwork_nullclines <- nullclines(
   bcr_subnetwork,
   xlim = c(0.0, 5.5),
