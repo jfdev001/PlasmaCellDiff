@@ -1,6 +1,6 @@
 # PlasmaCellDiff
 
-Codebase implementing the germinal center exit pathway kinetic model, emphasizing bifurcation analysis through simulation, as introduced by Martinez et. al. (2012). Part of the masters course Bioinformatics 1 during period 1, 2023 at the University of Amsterdam.
+Codebase implementing the germinal center exit pathway kinetic model, emphasizing bifurcation analysis through simulation, as introduced by Martinez et. al. (2012). Part of the masters course Bioinformatics 1 during period 1, 2023 at the University of Amsterdam. A summary of findings is contained in `frazier_jared_bioinformatics_report.pdf`.
 
 # Installation
 
